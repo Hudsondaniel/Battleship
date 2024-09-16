@@ -1,0 +1,4 @@
+Trick to update packages:
+
+1. npm -g install npm-check-updates
+2. ncu to see outdated versions or ncu --upgrade to update the package.json.
