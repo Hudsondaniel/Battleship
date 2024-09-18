@@ -1,10 +1,10 @@
 import './style.css';
 import './css-reset.css';
-import './Game/computerAI.js';
-import './Game/game.js';
-import './Game/gameBoard.js';
-import './Game/ship.js';
-import './Game/player.js';
+import computerAI from './Game/computerAI.js';
+import game from './Game/game.js';
+import gameBoard from './Game/gameBoard.js';
+import ship from './Game/ship.js';
+import player from './Game/player.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Webpack is working!');
