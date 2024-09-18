@@ -7,6 +7,10 @@ export default class GameBoard {
     placeShip(ship, position, direction = 'horizontal') {
         const [x, y] = position;
 
+        if (x < 0 || x >= this.board.length || y < 0 || y >= this.board.length) {
+            throw new Error('Position out of bounds');
+        }
+
         if (direction === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
                 if (this.board[x][y + i] !== null) {
