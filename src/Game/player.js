@@ -1,3 +1,6 @@
+import GameBoard from "./gameBoard.js";
+import ship from "./ship.js";
+
 export default class Player {
     constructor(name) {
         this.name = name;
@@ -7,10 +10,10 @@ export default class Player {
     }
 
     createBoard(size) {
-
+        return new GameBoard(size);
     }
 
-    placeShip(ship, position) {
+    placeShipPlayer(ship, position) {
 
     }
 
