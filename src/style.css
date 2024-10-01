@@ -35,7 +35,7 @@ nav img{
 
 .heading{
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 }
 
 .player-1{
@@ -62,4 +62,22 @@ nav img{
 .heading-text-two{
     background-color: #65708be3;
     border-radius: 0.3rem;
+}
+
+/* Grid for the gameboard */
+
+.gameboard-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 40px); /* Adjust size as needed */
+    grid-template-rows: repeat(10, 40px);
+    gap: 4px; /* Space between grid cells */
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
