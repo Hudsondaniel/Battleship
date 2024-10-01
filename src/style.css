@@ -1,11 +1,30 @@
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+body, html {
     height: 100%;
     margin: 0;
-    font-family: 'sans-serif', sans-serif;
+    font-family: "Oswald", sans-serif;
 }
 
-body {
+nav{
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    padding: 1rem;
+    background-color: rgba(233, 233, 233, 0.829);
+}
 
-    text-align: center;
-    background-color: #cbf9ffea;
+.battleship-heading{
+    margin: 0;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(167, 165, 165, 0.486);
+}
+
+nav img{
+    height: 1.7rem;
+    margin-right: 1rem;
+}
+
+.gameboard{
+    
 }
