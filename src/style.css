@@ -26,5 +26,40 @@ nav img{
 }
 
 .gameboard{
-    
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-right: 4rem;
+    margin-left: 4rem;
+    padding-top: 1rem;
+}
+
+.heading{
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.player-1{
+    margin-right: 2rem;
+}
+
+.player-2{
+    margin-left: 2rem;
+}
+
+.heading-text-one, .heading-text-two{
+    font-weight: 600;
+    letter-spacing: 0.3rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color: white;
+}
+
+.heading-text-one{
+    background-color: #e72660fa;
+    border-radius: 0.3rem;
+}
+
+.heading-text-two{
+    background-color: #65708be3;
+    border-radius: 0.3rem;
 }
