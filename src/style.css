@@ -30,7 +30,6 @@ nav img{
     grid-template-columns: 1fr 1fr;
     margin-right: 4rem;
     margin-left: 4rem;
-    padding-top: 1rem;
 }
 
 .heading{
@@ -58,23 +57,23 @@ nav img{
 .heading-text-one{
     background-color: #e72660fa;
     border-radius: 0.3rem;
-    margin-right: 3vh;
-    margin-left: 3vh;
+    margin-right: 4vh;
+    margin-left: 4vh;
 }
 
 .heading-text-two{
     background-color: #65708be3;
     border-radius: 0.3rem;
-    margin-right: 3vh;
-    margin-left: 3vh;
+    margin-right: 4vh;
+    margin-left: 4vh;
 }
 
 /* Grid for the gameboard */
 
 .gameboard-grid {
     display: grid;
-    grid-template-columns: repeat(10, 6vh);
-    grid-template-rows: repeat(10, 6vh);
+    grid-template-columns: repeat(11, 6vh);
+    grid-template-rows: repeat(11, 6vh);
     gap: 0.4rem; 
 }
 
@@ -97,5 +96,6 @@ nav img{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
+

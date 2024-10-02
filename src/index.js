@@ -6,23 +6,40 @@ import './Game/ship.js';
 import './Game/player.js';
 
 
-// Function to create a gameboard grid dynamically
 function createGameBoard(gridContainerId, boardSize) {
     const gameboardElement = document.querySelector(`#${gridContainerId}`);
-    
-    for (let i = 0; i < boardSize; i++) {
-        for (let j = 0; j < boardSize; j++) {
+    const letters = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // For column headers starting with a space
+
+    // Create the board grid with headers (A1, B2, etc.)
+    for (let i = 0; i <= boardSize; i++) {
+        for (let j = 0; j <= boardSize; j++) {
             const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.dataset.x = i;
-            cell.dataset.y = j;
+
+            // Create the column headers (A, B, C, ...)
+            if (i === 0 && j > 0) {
+                cell.classList.add('header');
+                cell.textContent = letters[j]; // Column headers
+            }
+            // Create the row headers (1, 2, 3, ...)
+            else if (j === 0 && i > 0) {
+                cell.classList.add('header');
+                cell.textContent = i; // Row headers
+            }
+            // Create the actual grid cells
+            else if (i > 0 && j > 0) {
+                cell.classList.add('cell');
+                cell.dataset.x = i - 1; // Adjust to 0-based index
+                cell.dataset.y = j - 1;
+            }
+
             gameboardElement.appendChild(cell);
         }
     }
 }
 
-// Call the function for both players' grids
-createGameBoard('player1-grid', 10);  // Create a 10x10 grid for Player 1
-createGameBoard('player2-grid', 10);  // Create a 10x10 grid for Player 2
+
+createGameBoard('player1-grid', 10);  
+createGameBoard('player2-grid', 10);
+
 
 
