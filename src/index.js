@@ -8,7 +8,7 @@ import './Game/player.js';
 
 function createGameBoard(gridContainerId, boardSize) {
     const gameboardElement = document.querySelector(`#${gridContainerId}`);
-    const letters = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // For column headers starting with a space
+    const letters = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
 
     // Create the board grid with headers (A1, B2, etc.)
     for (let i = 0; i <= boardSize; i++) {
