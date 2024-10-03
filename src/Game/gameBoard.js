@@ -1,7 +1,7 @@
 export default class GameBoard {
     constructor(size) {
         this.board = Array(size).fill(null).map(() => Array(size).fill(null));
-        this.ships = []; // Keep track of ships on the board
+        this.ships = []; 
     }
 
     placeShip(ship, position, direction = 'horizontal') {
