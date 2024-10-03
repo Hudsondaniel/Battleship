@@ -29,6 +29,3 @@ export default function createGameBoard(gridContainerId, boardSize) {
     }
 }
 
-
-createGameBoard('player1-grid', 10);  
-createGameBoard('player2-grid', 10);
