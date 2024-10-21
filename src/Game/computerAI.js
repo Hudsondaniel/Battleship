@@ -2,8 +2,9 @@ import Player from './player.js';
 import Ship from './ship.js';
 
 export default class ComputerAI extends Player {
-    constructor(name) {
+    constructor(name, board) {
         super(name);
+        this.board = board;
     }
 
     // Automatically place ships on the board
@@ -13,29 +14,29 @@ export default class ComputerAI extends Player {
 
             while (!placed) {
                 const position = this.getRandomPosition();
-                const direction = this.getRandomOrientation();
-                console.log(shipType)
-                const ship = new Ship(shipType.name, shipType.length, position, direction);
-                console.log(ship); 
+                const orientation = this.getRandomOrientation();
+                const ship = new Ship(shipType.name, shipType.length, position, orientation);
+                console.log(ship); // Log the ship to debug
 
                 if (this.canPlaceShip(ship)) {
-                    this.board.placeShip(ship.name, ship.length, ship.position, ship.direction);
-                    this.ships.push(ship); 
-                    placed = true; 
+                    this.board.placeShip(ship.type, ship.length, ship.position, ship.direction);
+                    this.ships.push(ship); // Add the ship to the ships array
+                    placed = true; // Set placed to true
                 } else {
-                    console.log(`Cannot place ${ship.name} at ${ship.position} ${direction}, trying a new position...`);
+                    console.log(`Cannot place ${ship.name} at ${ship.position} ${orientation}, trying a new position...`);
                 }
             }
         });
     }
 
+    // Check if the ship can be placed at the given position and orientation
     canPlaceShip(ship) {
         const [x, y] = ship.position;
 
-        console.log(`Checking position: ${ship.position}, Direction: ${ship.direction}`); 
-        console.log(ship.length);
-
+        console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); // Use ship.orientation
+    
         if (ship.direction === 'horizontal') {
+            // Check for out of bounds
             if (y + ship.length > this.board[0].length || x >= this.board.length) {
                 console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
                 return false; // Out of bounds
@@ -47,7 +48,7 @@ export default class ComputerAI extends Player {
                     return false; // Position occupied
                 }
             }
-        } else if (ship.direction === 'vertical') {
+        } else if (ship.orientation === 'vertical') {
             // Check for out of bounds
             if (x + ship.length > this.board.length || y >= this.board[0].length) {
                 console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
@@ -87,8 +88,8 @@ export default class ComputerAI extends Player {
 
     // Get a random position within the board
     getRandomPosition() {
-        const x = Math.floor(Math.random() * this.board.size);
-        const y = Math.floor(Math.random() * this.board.size);
+        const x = Math.floor(Math.random() * this.board.length);
+        const y = Math.floor(Math.random() * this.board.length);
         return [x, y];
     }
 
