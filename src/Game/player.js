@@ -8,13 +8,15 @@ export default class Player {
         this.shotHistory = [];
     }
 
-    createBoard(size) {
-        return new GameBoard(size);
+    createBoard(size, name) {
+        const newBoard = new GameBoard(size, this.name);
+        console.log(newBoard.printBoard());
+        return newBoard;
     }
 
-    placeShipPlayer(ship, position) {
-        this.board.placeShip(ship, position); 
-        this.ships.push(ship); 
+    placeShipPlayer(shipName, shipSize, position, direction) {
+        this.board.placeShip(shipName, shipSize, position, direction); 
+        this.ships.push(shipName); 
     }
 
     fireShot(target) {

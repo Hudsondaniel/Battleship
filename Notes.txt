@@ -1,0 +1,60 @@
+1. Game Initialization
+Set up the board for both the player and the computer (or another player if it's multiplayer).
+Place ships on the boards, which can either be manual (user input) or random.
+
+Methods:
+initializeBoard(): Create an empty board.
+placeShips(): Add ships to the board.
+randomShipPlacement() (optional for computer).
+
+2. Player Turn
+The player selects a target on the opponent’s board and fires.
+Check if the shot is a hit or miss.
+Update the opponent’s board accordingly (e.g., mark hits and misses).
+Methods:
+takeShot(targetCoordinates): Player selects coordinates.
+checkHitOrMiss(): Check if the shot hit or missed.
+updateBoard(): Update the board to reflect hits or misses.
+
+3. Computer Turn (AI or Second Player)
+The computer (or second player) selects a target on the player's board.
+Check if the shot is a hit or miss.
+Update the player’s board.
+Methods:
+computerTakeShot(): Select random or AI-based coordinates.
+checkHitOrMiss(): Same as in player turn.
+updateBoard(): Same as in player turn.
+
+4. Check for Win Condition
+After each turn, check if all of the ships on a player's board are sunk.
+Methods:
+checkForWin(): Determine if all ships are destroyed.
+
+5. Game Over
+If a player wins, display the winner and prompt for a replay or exit.
+Methods:
+displayWinner(): Show the winning player.
+resetGame(): Prepare for a new game.
+
+Ships Details:
+
+Carrier
+
+Size: 5 spaces
+The largest ship in the game.
+Battleship
+
+Size: 4 spaces
+Slightly smaller than the carrier but still formidable.
+Cruiser
+
+Size: 3 spaces
+Mid-sized ship, similar to the submarine.
+Submarine
+
+Size: 3 spaces
+Same size as the cruiser but often represented differently.
+Destroyer
+
+Size: 2 spaces
+The smallest and most maneuverable ship.

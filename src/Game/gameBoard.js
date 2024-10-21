@@ -1,10 +1,15 @@
 export default class GameBoard {
-    constructor(size) {
+    constructor(size, name) {
         this.board = Array(size).fill(null).map(() => Array(size).fill(null));
         this.ships = []; 
+        this.name = name;
+        this.printName();
+    }
+    printName(){
+        console.log(`Player ${this.name}'s Board:`);
     }
 
-    placeShip(ship, position, direction = 'horizontal') {
+    placeShip(shipName, shipSize, position, direction = 'horizontal') {
         const [x, y] = position;
 
         if (x < 0 || x >= this.board.length || y < 0 || y >= this.board.length) {
@@ -12,22 +17,22 @@ export default class GameBoard {
         }
 
         if (direction === 'horizontal') {
-            for (let i = 0; i < ship.length; i++) {
+            for (let i = 0; i < shipSize; i++) {
                 if (this.board[x][y + i] !== null) {
                     throw new Error('Position already occupied or out of bounds');
                 }
-                this.board[x][y + i] = ship;
+                this.board[x][y + i] = shipName;
             }
         } else if (direction === 'vertical') {
-            for (let i = 0; i < ship.length; i++) {
+            for (let i = 0; i < shipSize; i++) {
                 if (this.board[x + i][y] !== null) {
                     throw new Error('Position already occupied or out of bounds');
                 }
-                this.board[x + i][y] = ship;
+                this.board[x + i][y] = shipName;
             }
         }
 
-        this.ships.push(ship); // Add the ship to the ships array
+        this.ships.push(shipName); // Add the ship to the ships array
     }
 
     checkHit(position) {
