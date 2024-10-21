@@ -1,22 +1,28 @@
 import GameBoard from "./gameBoard.js";
 
 export default class Player {
-    constructor(name) {
+    constructor(name, ships = []) {
         this.name = name;
         this.board = this.createBoard(10); 
-        this.ships = [];
+        this.ships = ships;
         this.shotHistory = [];
     }
 
+    playerShips(){
+        this.ships.forEach(
+            ship => console.log(ship)
+        )
+    }
     createBoard(size, name) {
         const newBoard = new GameBoard(size, this.name);
         console.log(newBoard.printBoard());
         return newBoard;
     }
 
-    placeShipPlayer(shipName, shipSize, position, direction) {
-        this.board.placeShip(shipName, shipSize, position, direction); 
-        this.ships.push(shipName); 
+    placeShipPlayer() {
+        this.ships.forEach(
+            ship => this.board.placeShip(ship.type, ship.length, ship.position, ship.direction)
+        );
     }
 
     fireShot(target) {

@@ -4,6 +4,7 @@ export default class GameBoard {
         this.ships = []; 
         this.name = name;
         this.printName();
+        this.size = size;
     }
     printName(){
         console.log(`Player ${this.name}'s Board:`);

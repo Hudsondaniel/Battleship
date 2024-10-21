@@ -1,36 +1,33 @@
 import './style.css';
-import './Game/computerAI.js';
 import './Game/game.js';
 import createGameBoard from './Game/gameBoardUI.js';
 import Player from './Game/player.js';
-import './Game/ship.js';
-
-
-// Logic for the whole game goes here
-
-// UI elements for the game board
+import Ship from './Game/ship.js';
+import ComputerAI from './Game/computerAI.js';
 
 createGameBoard('player1-grid', 10);  
 createGameBoard('player2-grid', 10);
 
-// Backend logic for the game 
+const playerOneBoard = new Player("Hudson", [
+    new Ship('Carrier', 5, [0, 0], 'vertical'),      
+    new Ship('Battleship', 4, [0, 6], 'horizontal'), 
+    new Ship('Destroyer', 3, [6, 0], 'vertical'),    
+    new Ship('Submarine', 3, [4, 4], 'horizontal'),  
+    new Ship('Patrol Boat', 2, [7, 7], 'vertical'),  
+]);
 
-// New game board for Player 1
-
-const playerOneBoard = new Player("Hudson");
-const computerBoard = new Player("computer");
-
-// Logic to place ships according to user input in the game board for Player 1
-playerOneBoard.placeShipPlayer('carrier',5, [0,1], 'vertical');
-playerOneBoard.placeShipPlayer('battleship', 4, [0,5], 'horizontal');
-playerOneBoard.placeShipPlayer('cruiser', 4, [6,4], 'vertical');
-playerOneBoard.placeShipPlayer('submarine', 3, [6, 7], 'horizontal');
-playerOneBoard.placeShipPlayer('destroyer', 2, [2, 7], 'vertical');
+playerOneBoard.placeShipPlayer();
 
 
-// New game board for Player 2 (computer)
+const computerPlayer = new ComputerAI('computer');
+computerPlayer.placeShipsAutomatically([
+    {name: 'carrier', length: 5},
+    {name: 'Battleship', length: 4},
+    {name: 'Destroyer', length: 3},
+    {name: 'Submarine', length: 3},
+    {name: 'Patrol Boat', length: 2}
+]);
 
-// Logic to randomly place ships in the game board for Player 2 (Computer)
 
 
 
