@@ -6,29 +6,6 @@ export default class Player {
         this.board = this.createBoard(10); 
         this.ships = ships;
         this.shotHistory = [];
-
-    }
-
-    //Saving the state of the game to local storage. 
-    saveToLocalStorage(){
-        const gameState = {
-            board: this.board,
-            ships: this.ships,
-            shotHistory: this.shotHistory
-        };
-        localStorage.setItem("gameState", JSON.stringify(gameState));
-        return gameState;
-    }
-
-    loadFromLocalStorage(){
-        const gameState = localStorage.getItem('gameState');
-        if (gameState){
-            const {board, ships, shotHistory} = JSON.parse(gameState);
-            this.board = board;
-            this.ships = ships;
-            this.shotHistory = shotHistory;
-        }
-        console.log("Loaded Game State:", this)
     }
 
     playerShips(){
