@@ -15,12 +15,10 @@ export default class ComputerAI extends Player {
                 const position = this.getRandomPosition();
                 const orientation = this.getRandomOrientation();
                 const ship = new Ship(shipType.name, shipType.length, position, orientation);
-                console.log(ship); // Log the ship to debug
-
                 if (this.canPlaceShip(ship)) {
                     this.board.placeShip(ship.type, ship.length, ship.position, ship.direction);
-                    this.ships.push(ship); // Add the ship to the ships array
-                    placed = true; // Set placed to true
+                    this.ships.push(ship);
+                    placed = true; 
                 } else {
                     console.log(`Cannot place ${ship.name} at ${ship.position} ${orientation}, trying a new position...`);
                 }
@@ -32,37 +30,34 @@ export default class ComputerAI extends Player {
     canPlaceShip(ship) {
         const [x, y] = ship.position;
 
-        console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); // Use ship.direction
+        console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); 
     
         if (ship.direction === 'horizontal') {
-            // Check for out of bounds
-            if (y + ship.length > this.board.getSize() || x >= this.board.getSize()) { // Assuming getSize() returns the size
+            if (y + ship.length > this.board.getSize() || x >= this.board.getSize()) { 
                 console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
-                return false; // Out of bounds
+                return false; 
             }
-            // Check for occupancy
+
             for (let i = 0; i < ship.length; i++) {
-                if (this.board.getCell(x, y + i) !== null) { // Assuming getCell() checks occupancy
+                if (this.board.getCell(x, y + i) !== null) { 
                     console.log(`Position occupied at: ${x}, ${y + i}`);
-                    return false; // Position occupied
+                    return false; 
                 }
             }
         } else if (ship.direction === 'vertical') {
-            // Check for out of bounds
             if (x + ship.length > this.board.getSize() || y >= this.board.getSize()) {
                 console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
-                return false; // Out of bounds
+                return false; 
             }
-            // Check for occupancy
             for (let i = 0; i < ship.length; i++) {
                 if (this.board.getCell(x + i, y) !== null) {
                     console.log(`Position occupied at: ${x + i}, ${y}`);
-                    return false; // Position occupied
+                    return false; 
                 }
             }
         }
 
-        return true; // Ship can be placed
+        return true; 
     }
 
     // Fire a shot at a random position on the board

@@ -13,42 +13,39 @@ export default class GameBoard {
     placeShip(shipName, shipSize, position, direction = 'horizontal') {
         const [x, y] = position;
     
-        // Check if the starting position is out of bounds
+
         if (x < 0 || x >= this.board.length || y < 0 || y >= this.board[x].length) {
-            return false; // Position out of bounds
+            return false; 
         }
     
-        // Check if the ship can fit based on the direction
         if (direction === 'horizontal') {
             if (y + shipSize > this.board[x].length) {
-                return false; // Ship cannot fit horizontally
+                return false; 
             }
             for (let i = 0; i < shipSize; i++) {
                 if (this.board[x][y + i] !== null) {
-                    return false; // Position already occupied
+                    return false; 
                 }
             }
             for (let i = 0; i < shipSize; i++) {
-                this.board[x][y + i] = shipName; // Place the ship
+                this.board[x][y + i] = shipName; 
             }
         } else if (direction === 'vertical') {
             if (x + shipSize > this.board.length) {
-                return false; // Ship cannot fit vertically
+                return false; 
             }
             for (let i = 0; i < shipSize; i++) {
                 if (this.board[x + i][y] !== null) {
-                    return false; // Position already occupied
+                    return false; 
                 }
             }
             for (let i = 0; i < shipSize; i++) {
-                this.board[x + i][y] = shipName; // Place the ship
+                this.board[x + i][y] = shipName; 
             }
         }
-    
-        // Optionally, create a Ship object instead of just using the name
-        // this.ships.push(new Ship(shipName, shipSize, position, direction));
-        this.ships.push(shipName); // Add the ship to the ships array
-        return true; // Placement successful
+
+        this.ships.push(shipName); 
+        return true; 
     }
     
 
@@ -93,10 +90,9 @@ export default class GameBoard {
     }
 
     getCell(x, y) {
-        // Check if the coordinates are within the bounds of the board
         if (x < 0 || x >= this.size || y < 0 || y >= this.size) {
-            return null; // Return null if out of bounds
+            return null; 
         }
-        return this.board[x][y]; // Return the value of the cell
+        return this.board[x][y]; 
     }
 }
