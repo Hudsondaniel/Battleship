@@ -42,19 +42,23 @@ Carrier
 
 Size: 5 spaces
 The largest ship in the game.
+
 Battleship
 
 Size: 4 spaces
 Slightly smaller than the carrier but still formidable.
-Cruiser
 
-Size: 3 spaces
-Mid-sized ship, similar to the submarine.
 Submarine
 
 Size: 3 spaces
-Same size as the cruiser but often represented differently.
+Mid-sized ship, similar to the submarine.
+
 Destroyer
+
+Size: 3 spaces
+Same size as the cruiser but often represented differently.
+
+Patrol Boat
 
 Size: 2 spaces
 The smallest and most maneuverable ship.

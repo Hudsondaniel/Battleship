@@ -2,9 +2,8 @@ import Player from './player.js';
 import Ship from './ship.js';
 
 export default class ComputerAI extends Player {
-    constructor(name, board) {
-        super(name);
-        this.board = board;
+    constructor(name) {
+        super(name); // No need to pass board here, it will be created in the Player class
     }
 
     // Automatically place ships on the board
@@ -33,30 +32,30 @@ export default class ComputerAI extends Player {
     canPlaceShip(ship) {
         const [x, y] = ship.position;
 
-        console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); // Use ship.orientation
+        console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); // Use ship.direction
     
         if (ship.direction === 'horizontal') {
             // Check for out of bounds
-            if (y + ship.length > this.board[0].length || x >= this.board.length) {
+            if (y + ship.length > this.board.getSize() || x >= this.board.getSize()) { // Assuming getSize() returns the size
                 console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
                 return false; // Out of bounds
             }
             // Check for occupancy
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[x][y + i] !== null) {
+                if (this.board.getCell(x, y + i) !== null) { // Assuming getCell() checks occupancy
                     console.log(`Position occupied at: ${x}, ${y + i}`);
                     return false; // Position occupied
                 }
             }
-        } else if (ship.orientation === 'vertical') {
+        } else if (ship.direction === 'vertical') {
             // Check for out of bounds
-            if (x + ship.length > this.board.length || y >= this.board[0].length) {
+            if (x + ship.length > this.board.getSize() || y >= this.board.getSize()) {
                 console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
                 return false; // Out of bounds
             }
             // Check for occupancy
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[x + i][y] !== null) {
+                if (this.board.getCell(x + i, y) !== null) {
                     console.log(`Position occupied at: ${x + i}, ${y}`);
                     return false; // Position occupied
                 }
@@ -88,8 +87,8 @@ export default class ComputerAI extends Player {
 
     // Get a random position within the board
     getRandomPosition() {
-        const x = Math.floor(Math.random() * this.board.length);
-        const y = Math.floor(Math.random() * this.board.length);
+        const x = Math.floor(Math.random() * this.board.getSize()); // Use getSize() for both dimensions
+        const y = Math.floor(Math.random() * this.board.getSize());
         return [x, y];
     }
 
