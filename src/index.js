@@ -18,7 +18,6 @@ const playerOneBoard = new Player("Hudson", [
 
 playerOneBoard.placeShipPlayer();
 
-
 const computerPlayer = new ComputerAI('computer');
 computerPlayer.placeShipsAutomatically([
     {name: 'carrier', length: 5},
