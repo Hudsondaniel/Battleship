@@ -1,7 +1,7 @@
 import Player from './player.js';
 import ComputerAI from './computerAI.js';
 import Ship from './ship.js';
-import GameBoard from './gameBoard.js';
+import board from './gameBoard.js';
 
 class Game {
     constructor(playerName) {
@@ -35,7 +35,7 @@ class Game {
         this.declareWinner();
     }
 
-    playerTurn() {
+    playerTurn(position) {
         const target = this.getPlayerTarget();
         const hit = this.computer.fireShot(target);
         this.player.shotHistory.push({ target, hit });
@@ -48,12 +48,11 @@ class Game {
         console.log(`Computer fired at ${target} and ${hit ? 'hit!' : 'missed!'}`);
     }
 
-    getPlayerTarget() {
-        // Implement user input handling for targeting, e.g., prompt for coordinates
-        // For example, you could use:
-        // return prompt("Enter your target (e.g., 0,0):").split(',').map(Number);
-        return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]; // Placeholder for demonstration
+    getPlayerTarget(position) {
+        const [x, y] = position; 
+        this.board[x][y] = 'X'; 
     }
+    
 
     isGameOver() {
         return this.player.isGameOver() || this.computer.isGameOver();

@@ -68,16 +68,9 @@ export default class GameBoard {
     }
     
 
-    checkHit(position) {
-        const [x, y] = position;
-
-        if (this.board[x][y] && this.board[x][y] !== 'X') {
-            const ship = this.board[x][y];
-            ship.hit();
-            this.board[x][y] = 'X'; // Mark as hit
-            return true;
-        }
-        return false;
+    checkHit(target) {
+        const [x, y] = target; 
+        this.board[x][y] = 'X';
     }
 
 

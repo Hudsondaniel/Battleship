@@ -48,6 +48,7 @@ initialize();
 // Load game states for both players
 playerOneBoard.loadGameState();
 computerPlayer.loadGameState();
+// Player hits computer board
 
-
+playerOneBoard.fireShot([0,1]);
 

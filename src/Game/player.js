@@ -66,9 +66,11 @@ export default class Player {
     }
 
     fireShot(target) {
-        const hit = this.board.checkHit(target); 
-        this.shotHistory.push({ target, hit }); 
-        return hit; 
+        // const hit = this.board.checkHit(target); 
+        this.board.checkHit(target);
+        // this.shotHistory.push({ target, hit }); 
+        // return hit; 
+
     }
 
     isSunk() {
