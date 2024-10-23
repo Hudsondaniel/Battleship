@@ -3,7 +3,7 @@ export default class GameBoard {
         this.board = Array(size).fill(null).map(() => Array(size).fill(null));
         this.ships = []; 
         this.name = name;
-        this.printName();
+        //this.printName();
         this.size = size;
     }
 
@@ -17,7 +17,7 @@ export default class GameBoard {
     deserializeBoard(serializedData) {
         this.size = serializedData.size;
         this.board = serializedData.grid || serializedData.board; // Ensure correct deserialization
-        //console.table(this.board); // Debugging step
+        // console.table(this.board); 
     }
 
     // Example method to display the board

@@ -7,8 +7,9 @@ export default class Player {
         this.board = this.createBoard(10); 
         this.ships = ships;
         this.shotHistory = [];
-
+    
     }
+
 
     saveGameState(){
         // Custom serialization to extract the essential information
@@ -29,7 +30,7 @@ export default class Player {
     }
     
     loadGameState(){
-        const savedGameState = JSON.parse(localStorage.getItem("gameState"));
+        const savedGameState = JSON.parse(localStorage.getItem(this.name));
         if (savedGameState) {
             // Reconstruct board
             this.board = new GameBoard(10, this.name);
@@ -60,10 +61,7 @@ export default class Player {
 
     placeShipPlayer() {
         this.ships.forEach(
-            (ship )=>{
-                this.board.placeShip(ship.type, ship.length, ship.position, ship.direction)
-                this.ships.push(ship);  // Add ship to player's ships list
-            }
+            ship => this.board.placeShip(ship.type, ship.length, ship.position, ship.direction)
         );
     }
 

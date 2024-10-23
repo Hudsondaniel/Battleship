@@ -16,10 +16,11 @@ const playerOneBoard = new Player("Hudson", [
     new Ship('Patrol Boat', 2, [7, 7], 'vertical'),  
 ]);
 
+playerOneBoard.placeShipPlayer();
 playerOneBoard.saveGameState();
 playerOneBoard.loadGameState();
 
-playerOneBoard.placeShipPlayer();
+
 
 const computerPlayer = new ComputerAI('computer');
 computerPlayer.placeShipsAutomatically([
@@ -30,12 +31,12 @@ computerPlayer.placeShipsAutomatically([
     {name: 'Patrol Boat', length: 2}
 ]);
 
-computerPlayer.saveGameState();
+
 // Trying to check if I can save the game state on button click
 
 document.querySelector('.test').addEventListener('click', () => {
     if (typeof computerPlayer.saveGameState === 'function') {
-
+        computerPlayer.saveGameState();
     }
 });
 
