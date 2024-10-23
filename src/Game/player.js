@@ -7,7 +7,6 @@ export default class Player {
         this.board = this.createBoard(10); 
         this.ships = ships;
         this.shotHistory = [];
-    
     }
 
 
@@ -41,7 +40,8 @@ export default class Player {
     
             // Restore shot history
             this.shotHistory = savedGameState.shotHistory;
-            console.log("Game loaded:", this.board, this.ships, this.shotHistory);
+            console.log(this.name)
+            console.table("Game loaded:", this.board.board, this.ships, this.shotHistory);
             console.table(this.board.board)
         } else {
             console.log("No saved game found.");
@@ -86,7 +86,7 @@ export default class Player {
     }
 
     getName() {
-        return this.name;
+        console.log(this.name);
     }
 
     getScore() {
