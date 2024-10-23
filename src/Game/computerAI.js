@@ -20,7 +20,7 @@ export default class ComputerAI extends Player {
                     this.ships.push(ship);
                     placed = true; 
                 } else {
-                    console.log(`Cannot place ${ship.name} at ${ship.position} ${orientation}, trying a new position...`);
+                    //console.log(`Cannot place ${ship.name} at ${ship.position} ${orientation}, trying a new position...`);
                 }
             }
         });
@@ -30,28 +30,28 @@ export default class ComputerAI extends Player {
     canPlaceShip(ship) {
         const [x, y] = ship.position;
 
-        console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); 
+        //console.log(`Checking position: ${ship.position}, Orientation: ${ship.direction}`); 
     
         if (ship.direction === 'horizontal') {
             if (y + ship.length > this.board.getSize() || x >= this.board.getSize()) { 
-                console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
+                //console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
                 return false; 
             }
 
             for (let i = 0; i < ship.length; i++) {
                 if (this.board.getCell(x, y + i) !== null) { 
-                    console.log(`Position occupied at: ${x}, ${y + i}`);
+                    //console.log(`Position occupied at: ${x}, ${y + i}`);
                     return false; 
                 }
             }
         } else if (ship.direction === 'vertical') {
             if (x + ship.length > this.board.getSize() || y >= this.board.getSize()) {
-                console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
+                //console.log(`Out of bounds: ${x}, ${y} with length ${ship.length}`);
                 return false; 
             }
             for (let i = 0; i < ship.length; i++) {
                 if (this.board.getCell(x + i, y) !== null) {
-                    console.log(`Position occupied at: ${x + i}, ${y}`);
+                    //console.log(`Position occupied at: ${x + i}, ${y}`);
                     return false; 
                 }
             }

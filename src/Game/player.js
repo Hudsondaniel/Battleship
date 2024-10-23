@@ -24,8 +24,8 @@ export default class Player {
             shotHistory: this.shotHistory
         };
     
-        localStorage.setItem("gameState", JSON.stringify(gameState));
-        console.log("Game saved:", localStorage.getItem("gameState"));
+        localStorage.setItem(this.name, JSON.stringify(gameState));
+        //console.log("Game saved:", localStorage.getItem("gameState"));
     }
     
     loadGameState(){
@@ -41,7 +41,7 @@ export default class Player {
             // Restore shot history
             this.shotHistory = savedGameState.shotHistory;
             console.log("Game loaded:", this.board, this.ships, this.shotHistory);
-            console.table(this.board);
+            console.table(this.board.board)
         } else {
             console.log("No saved game found.");
         }
@@ -55,13 +55,15 @@ export default class Player {
     }
     createBoard(size, name) {
         const newBoard = new GameBoard(size, this.name);
-        console.log(newBoard.printBoard());
         return newBoard;
     }
 
     placeShipPlayer() {
         this.ships.forEach(
-            ship => this.board.placeShip(ship.type, ship.length, ship.position, ship.direction)
+            (ship )=>{
+                this.board.placeShip(ship.type, ship.length, ship.position, ship.direction)
+                this.ships.push(ship);  // Add ship to player's ships list
+            }
         );
     }
 

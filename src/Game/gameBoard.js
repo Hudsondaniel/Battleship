@@ -17,7 +17,7 @@ export default class GameBoard {
     deserializeBoard(serializedData) {
         this.size = serializedData.size;
         this.board = serializedData.grid || serializedData.board; // Ensure correct deserialization
-        console.log("Board deserialized:", this.board); // Debugging step
+        //console.table(this.board); // Debugging step
     }
 
     // Example method to display the board
@@ -80,9 +80,6 @@ export default class GameBoard {
         return false;
     }
 
-    printBoard() {
-        console.table(this.board);
-    }
 
     isGameOver() {
         return this.ships.every(ship => ship.isSunk());
