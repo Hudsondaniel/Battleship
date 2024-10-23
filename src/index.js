@@ -10,17 +10,13 @@ createGameBoard('player2-grid', 10);
 
 const playerOneBoard = new Player("Hudson", [
     new Ship('Carrier', 5, [0, 0], 'vertical'),      
-    new Ship('Battleship', 4, [0, 6], 'horizontal'), 
+    new Ship('Battleship', 4, [0, 3], 'horizontal'), 
     new Ship('Destroyer', 3, [6, 0], 'vertical'),    
     new Ship('Submarine', 3, [4, 4], 'horizontal'),  
     new Ship('Patrol Boat', 2, [7, 7], 'vertical'),  
 ]);
 
 playerOneBoard.placeShipPlayer();
-playerOneBoard.saveGameState();
-playerOneBoard.loadGameState();
-
-
 
 const computerPlayer = new ComputerAI('computer');
 computerPlayer.placeShipsAutomatically([
@@ -31,21 +27,27 @@ computerPlayer.placeShipsAutomatically([
     {name: 'Patrol Boat', length: 2}
 ]);
 
+function initialize() {
+    const playerOneState = localStorage.getItem(playerOneBoard.getName());
+    const computerPlayerState = localStorage.getItem(computerPlayer.getName());
 
-// Trying to check if I can save the game state on button click
-
-document.querySelector('.test').addEventListener('click', () => {
-    if (typeof computerPlayer.saveGameState === 'function') {
+    if (!playerOneState) {
+        playerOneBoard.saveGameState();
+    }
+    
+    if (!computerPlayerState) {
         computerPlayer.saveGameState();
     }
-});
 
-if (typeof computerPlayer.loadGameState === 'function') {
-    computerPlayer.loadGameState();
+    return true;
 }
 
+// Call initialize first
+initialize();
 
-
+// Load game states for both players
+playerOneBoard.loadGameState();
+computerPlayer.loadGameState();
 
 
 
