@@ -28,6 +28,18 @@ computerPlayer.placeShipsAutomatically([
 ]);
 
 
+// Trying to check if I can save the game state on button click
+
+document.querySelector('.test').addEventListener('click', () => {
+    if (typeof computerPlayer.saveGameState === 'function') {
+        computerPlayer.saveGameState();
+    }
+});
+
+if (typeof computerPlayer.loadGameState === 'function') {
+    computerPlayer.loadGameState();
+}
+
 
 
 

@@ -6,6 +6,25 @@ export default class GameBoard {
         this.printName();
         this.size = size;
     }
+
+    serializeBoard() {
+        return {
+            size: this.size,
+            grid: this.board
+        };
+    }
+
+    deserializeBoard(serializedData) {
+        this.size = serializedData.size;
+        this.board = serializedData.grid || serializedData.board; // Ensure correct deserialization
+        console.log("Board deserialized:", this.board); // Debugging step
+    }
+
+    // Example method to display the board
+    printBoard() {
+        return this.grid;
+    }
+
     printName(){
         console.log(`Player ${this.name}'s Board:`);
     }

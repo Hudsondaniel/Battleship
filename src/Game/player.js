@@ -1,4 +1,5 @@
 import GameBoard from "./gameBoard.js";
+import Ship from "./ship.js";
 
 export default class Player {
     constructor(name, ships = []) {
@@ -6,7 +7,46 @@ export default class Player {
         this.board = this.createBoard(10); 
         this.ships = ships;
         this.shotHistory = [];
+
     }
+
+    saveGameState(){
+        // Custom serialization to extract the essential information
+        const gameState = {
+            name: this.name,
+            board: this.board.serializeBoard(), // We will define this method below
+            ships: this.ships.map(ship => ({
+                type: ship.type,
+                length: ship.length,
+                position: ship.position,
+                direction: ship.direction
+            })),
+            shotHistory: this.shotHistory
+        };
+    
+        localStorage.setItem("gameState", JSON.stringify(gameState));
+        console.log("Game saved:", localStorage.getItem("gameState"));
+    }
+    
+    loadGameState(){
+        const savedGameState = JSON.parse(localStorage.getItem("gameState"));
+        if (savedGameState) {
+            // Reconstruct board
+            this.board = new GameBoard(10, this.name);
+            this.board.deserializeBoard(savedGameState.board);  // Custom deserialization method
+            
+            // Reconstruct ships
+            this.ships = savedGameState.ships.map(shipData => new Ship(shipData.type, shipData.length, shipData.position, shipData.direction));
+    
+            // Restore shot history
+            this.shotHistory = savedGameState.shotHistory;
+            console.log("Game loaded:", this.board, this.ships, this.shotHistory);
+            console.table(this.board);
+        } else {
+            console.log("No saved game found.");
+        }
+    }
+    
 
     playerShips(){
         this.ships.forEach(
