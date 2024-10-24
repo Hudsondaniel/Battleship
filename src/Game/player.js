@@ -9,6 +9,14 @@ export default class Player {
         this.shotHistory = [];
     }
 
+    initialize() {
+        const player = localStorage.getItem(this.name);
+        if(!player){
+            player.saveGameState();
+        }
+        return true;
+    }
+
 
     saveGameState(){
         // Custom serialization to extract the essential information

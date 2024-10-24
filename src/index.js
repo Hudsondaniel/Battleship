@@ -27,28 +27,14 @@ computerPlayer.placeShipsAutomatically([
     {name: 'Patrol Boat', length: 2}
 ]);
 
-function initialize() {
-    const playerOneState = localStorage.getItem(playerOneBoard.getName());
-    const computerPlayerState = localStorage.getItem(computerPlayer.getName());
-
-    if (!playerOneState) {
-        playerOneBoard.saveGameState();
-    }
-    
-    if (!computerPlayerState) {
-        computerPlayer.saveGameState();
-    }
-
-    return true;
-}
-
-// Call initialize first
-initialize();
+playerOneBoard.initialize();
+computerPlayer.initialize();
 
 // Load game states for both players
 playerOneBoard.loadGameState();
 computerPlayer.loadGameState();
+
 // Player hits computer board
 
-playerOneBoard.fireShot([0,1]);
+
 
