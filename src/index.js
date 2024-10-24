@@ -1,10 +1,12 @@
 import './style.css';
-import './Game/game.js';
 import createGameBoard from './Game/gameBoardUI.js';
 import Player from './Game/player.js';
 import Ship from './Game/ship.js';
 import ComputerAI from './Game/computerAI.js';
+import Game from './Game/game.js';
 
+
+// Initiate game UI to which You would be adding the backend details
 createGameBoard('player1-grid', 10);  
 createGameBoard('player2-grid', 10);
 
@@ -34,7 +36,6 @@ computerPlayer.initialize();
 playerOneBoard.loadGameState();
 computerPlayer.loadGameState();
 
-// Player hits computer board
-
+let newGame = new Game(playerOneBoard, computerPlayer);
 
 

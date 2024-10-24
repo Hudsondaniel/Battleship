@@ -3,33 +3,21 @@ import ComputerAI from './computerAI.js';
 import Ship from './ship.js';
 import board from './gameBoard.js';
 
-class Game {
-    constructor(playerName) {
-        this.player = new Player(playerName);
-        this.computer = new ComputerAI('Computer');
-        this.shipTypes = [
-            { name: 'Battleship', length: 4 },
-            { name: 'Destroyer', length: 3 },
-            { name: 'Submarine', length: 3 },
-            { name: 'Patrol Boat', length: 2 },
-        ];
-        this.initializeGame();
-    }
-
-    initializeGame() {
-        this.player.placeShipsAutomatically(this.shipTypes);
-        this.computer.placeShipsAutomatically(this.shipTypes);
+export default class Game {
+    constructor(player, computer) {
+        this.player = player;
+        this.computer = computer;
     }
 
     startGame() {
-        let turn = 'player';
+        let turn = this.player;
         while (!this.isGameOver()) {
-            if (turn === 'player') {
+            if (turn === this.player) {
                 this.playerTurn();
-                turn = 'computer';
+                turn = this.computer;
             } else {
                 this.computerTurn();
-                turn = 'player';
+                turn = this.player;
             }
         }
         this.declareWinner();

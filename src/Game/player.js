@@ -9,6 +9,8 @@ export default class Player {
         this.shotHistory = [];
     }
 
+    
+    // Method to initialize the game with the saved board.
     initialize() {
         const player = localStorage.getItem(this.name);
         if(!player){
@@ -17,7 +19,7 @@ export default class Player {
         return true;
     }
 
-
+    //Saves the current board
     saveGameState(){
         // Custom serialization to extract the essential information
         const gameState = {
@@ -36,6 +38,7 @@ export default class Player {
         //console.log("Game saved:", localStorage.getItem("gameState"));
     }
     
+    //Loads the current/updated board
     loadGameState(){
         const savedGameState = JSON.parse(localStorage.getItem(this.name));
         if (savedGameState) {
@@ -56,6 +59,15 @@ export default class Player {
         }
     }
     
+    startGame() {
+        let turn = true;
+        while (!this.isGameOver()) {
+            this.fireShot();
+            turn = !turn;
+        }
+        this.declareWinner();
+    }
+
 
     playerShips(){
         this.ships.forEach(
