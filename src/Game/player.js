@@ -59,16 +59,6 @@ export default class Player {
         }
     }
     
-    startGame() {
-        let turn = true;
-        while (!this.isGameOver()) {
-            this.fireShot();
-            turn = !turn;
-        }
-        this.declareWinner();
-    }
-
-
     playerShips(){
         this.ships.forEach(
             ship => console.log(ship)
@@ -87,7 +77,9 @@ export default class Player {
 
     fireShot(target) {
         // const hit = this.board.checkHit(target); 
-        this.board.checkHit(target);
+        console.log("I am hit");
+        const [x, y] = target;
+        this.board[x][y] = "X";
         // this.shotHistory.push({ target, hit }); 
         // return hit; 
 

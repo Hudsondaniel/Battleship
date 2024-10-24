@@ -38,4 +38,5 @@ computerPlayer.loadGameState();
 
 let newGame = new Game(playerOneBoard, computerPlayer);
 
+newGame.start();
 

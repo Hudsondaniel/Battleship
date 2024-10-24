@@ -9,7 +9,8 @@ export default class Game {
         this.computer = computer;
     }
 
-    startGame() {
+    start() {
+        console.log(`${this.player}, welcome to Battleship!`);
         let turn = this.player;
         while (!this.isGameOver()) {
             if (turn === this.player) {
@@ -23,11 +24,13 @@ export default class Game {
         this.declareWinner();
     }
 
-    playerTurn(position) {
-        const target = this.getPlayerTarget();
-        const hit = this.computer.fireShot(target);
-        this.player.shotHistory.push({ target, hit });
-        console.log(`You fired at ${target} and ${hit ? 'hit!' : 'missed!'}`);
+    playerTurn() {
+        console.log(this.player + "enter the target: ")
+        const position = [0, 2];
+        this.player.fireShot(position);
+        // const hit = this.computer.fireShot(target);
+        // this.player.shotHistory.push({ target, hit });
+        // console.log(`You fired at ${target} and ${hit ? 'hit!' : 'missed!'}`);
     }
 
     computerTurn() {
@@ -43,7 +46,7 @@ export default class Game {
     
 
     isGameOver() {
-        return this.player.isGameOver() || this.computer.isGameOver();
+        return false;
     }
 
     declareWinner() {

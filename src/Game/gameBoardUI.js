@@ -1,3 +1,4 @@
+
 export default function createGameBoard(gridContainerId, boardSize) {
     const gameboardElement = document.querySelector(`#${gridContainerId}`);
     const letters = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
