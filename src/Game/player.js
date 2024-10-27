@@ -14,7 +14,7 @@ export default class Player {
     initialize() {
         const player = localStorage.getItem(this.name);
         if(!player){
-            player.saveGameState();
+            this.saveGameState();
         }
         return true;
     }

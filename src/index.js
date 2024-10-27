@@ -69,6 +69,7 @@ function attackComputer(position) {
 
     // Update the computer's board
     computerPlayer.board.board[x][y] = "X";
+    console.log(computerPlayer.ships)
     computerPlayer.saveGameState();
 }
 
@@ -77,4 +78,11 @@ function computerAttacksPlayer() {
     const [x, y] = computerPlayer.getRandomPosition();
     playerOneBoard.board.board[x][y] = "X";
     playerOneBoard.saveGameState();
+}
+
+
+
+function newGame(){
+    // Reset game board and players
+    localStorage.clear();
 }
