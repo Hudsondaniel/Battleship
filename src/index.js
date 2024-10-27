@@ -36,51 +36,131 @@ computerPlayer.initialize();
 playerOneBoard.loadGameState();
 computerPlayer.loadGameState();
 
-startGame()
+startGame();
 
-function startGame() {
-    let isPlayerTurn = true; // Boolean to track whose turn it is
-
-    attackComputer([2,2])
-
-    // Loop to continue until the game ends
-    // while (true) {
-        // if (isPlayerTurn) {
-            // console.log("Choose a position to attack:");
-            // attackComputer([0, 1]); // Assuming this function handles the attack
-        // } else {
-            // Handle computer's turn logic here
-            // console.log("Computer's turn...");
-            // Add computer's attack logic here, e.g.:
-            // computerAttack();
-        // }
-
+async function startGame() {
+    let isPlayerTurn = true;
+    
+    while(true){
+        if (isPlayerTurn) {
+            console.log("Choose a position to attack:");
+            const position = await getPlayerInput(); // Function to get input asynchronously
+            playerAttackComputer(position);
+        } else {
+            console.log("Computer's turn...");
+            computerAttacksPlayer();
+        }
+    
         // Toggle the turn
-        // isPlayerTurn = !isPlayerTurn;
+        isPlayerTurn = !isPlayerTurn;
+    
+        // Check for game over conditions
+        // if (!isGameOver()) {
+        //     nextTurn(); // Call the next turn if the game isn't over
+        // } else {
+        //     declareWinner(); // Handle declaring the winner
+        // }
+    }
+}
 
-        // Here, you may want to include logic to check if the game has ended
-        // For example, check for a winner or if there are remaining turns
-    // }
+function getPlayerInput() {
+    return new Promise((resolve) => {
+        const position = prompt("Enter your attack coordinates (e.g., 0,1):");
+        resolve(position.split(',').map(Number)); // Convert input to array of numbers
+    });
 }
 
 
-function attackComputer(position) {
+function playerAttackComputer(position) {
     const [x, y] = position;
-
+    
+    if(computerPlayer.board.board[x][y] === null){
+        computerPlayer.board.board[x][y] = "X";
+        return;
+    }
     // Update the computer's board
-    computerPlayer.board.board[x][y] = "X";
+    if(computerPlayer.board.board[x][y] === "X"){
+        console.log("Invalid! You have already hit this position!")
+    };
+
+    const cellValue = computerPlayer.board.board[x][y];
+
+    switch (cellValue) {
+        case "Battleship":
+            console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
+            computerPlayer.board.board[x][y] = "H";
+            console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
+    
+            const battleship = computerPlayer.ships.find(s => s.type === "Battleship");
+            if (battleship) {
+                battleship.hit();
+            }
+            console.log(`Hit! You hit the ${battleship.type}. Total hits: ${battleship.hits}`);
+            break;
+    
+        case "carrier":
+            console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
+            computerPlayer.board.board[x][y] = "H";
+            console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
+    
+            const carrier = computerPlayer.ships.find(s => s.type === "carrier");
+            if (carrier) {
+                carrier.hit();
+            }
+            console.log(`Hit! You hit the ${carrier.type}. Total hits: ${carrier.hits}`);
+            break;
+    
+        case "Submarine":
+            console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
+            computerPlayer.board.board[x][y] = "H";
+            console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
+    
+            const submarine = computerPlayer.ships.find(s => s.type === "Submarine");
+            if (submarine) {
+                submarine.hit();
+            }
+            console.log(`Hit! You hit the ${submarine.type}. Total hits: ${submarine.hits}`);
+            break;
+    
+        case "Destroyer":
+            console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
+            computerPlayer.board.board[x][y] = "H";
+            console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
+    
+            const destroyer = computerPlayer.ships.find(s => s.type === "Destroyer");
+            if (destroyer) {
+                destroyer.hit();
+            }
+            console.log(`Hit! You hit the ${destroyer.type}. Total hits: ${destroyer.hits}`);
+            break;
+    
+        case "Patrol Boat":
+            console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
+            computerPlayer.board.board[x][y] = "H";
+            console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
+    
+            const patrolBoat = computerPlayer.ships.find(s => s.type === "Patrol Boat");
+            if (patrolBoat) {
+                patrolBoat.hit();
+            }
+            console.log(`Hit! You hit the ${patrolBoat.type}. Total hits: ${patrolBoat.hits}`);
+            break;
+    
+        default:
+            console.log("Missed or invalid target.");
+            break;
+    }
+    
+
     console.log(computerPlayer.ships)
     computerPlayer.saveGameState();
 }
-
 
 function computerAttacksPlayer() {
     const [x, y] = computerPlayer.getRandomPosition();
     playerOneBoard.board.board[x][y] = "X";
     playerOneBoard.saveGameState();
 }
-
-
 
 function newGame(){
     // Reset game board and players
