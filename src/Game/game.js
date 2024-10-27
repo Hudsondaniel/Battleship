@@ -1,18 +1,18 @@
-import Player from './player.js';
-import ComputerAI from './computerAI.js';
-import Ship from './ship.js';
-import board from './gameBoard.js';
-
 export default class Game {
-    constructor(player, computer) {
+    constructor(player, computer, playerBoard, computerBoard) {
         this.player = player;
         this.computer = computer;
+        this.playerBoard = playerBoard;
+        this.computerBoard = computerBoard;
+        this.turnCount = 0; // Temporary counter to prevent infinite loop in testing
     }
 
     start() {
         console.log(`${this.player}, welcome to Battleship!`);
         let turn = this.player;
-        while (!this.isGameOver()) {
+
+        // Limit the loop to a maximum of 20 turns for debugging purposes
+        // while (!this.isGameOver() && this.turnCount < 20) {
             if (turn === this.player) {
                 this.playerTurn();
                 turn = this.computer;
@@ -20,41 +20,37 @@ export default class Game {
                 this.computerTurn();
                 turn = this.player;
             }
-        }
-        this.declareWinner();
+            this.turnCount++;
+        // }
+
+        // this.declareWinner();
     }
 
     playerTurn() {
-        console.log(this.player + "enter the target: ")
-        const position = [0, 2];
-        this.player.fireShot(position);
-        // const hit = this.computer.fireShot(target);
-        // this.player.shotHistory.push({ target, hit });
-        // console.log(`You fired at ${target} and ${hit ? 'hit!' : 'missed!'}`);
+        const position = [2, 2];
+        const [x, y] = position;
+        console.log(`Player is firing at position: ${position}`);
+        this.playerBoard.board[x][y] = "X";
+
     }
 
     computerTurn() {
-        const target = this.computer.fireShot();
-        const hit = this.player.fireShot(target);
-        console.log(`Computer fired at ${target} and ${hit ? 'hit!' : 'missed!'}`);
+        const target = [3, 3];
+        console.log(`Computer is firing at position: ${target}`);
     }
-
-    getPlayerTarget(position) {
-        const [x, y] = position; 
-        this.board[x][y] = 'X'; 
-    }
-    
 
     isGameOver() {
+        // Implement logic to check if all ships of either player or computer are destroyed
         return false;
     }
 
     declareWinner() {
         if (this.player.isGameOver()) {
             console.log("Computer wins!");
-        } else {
+        } else if (this.computer.isGameOver()) {
             console.log("You win!");
+        } else {
+            console.log("It's a draw!");
         }
     }
 }
-

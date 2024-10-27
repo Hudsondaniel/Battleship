@@ -75,14 +75,23 @@ export default class Player {
         );
     }
 
-    fireShot(target) {
-        // const hit = this.board.checkHit(target); 
-        console.log("I am hit");
-        const [x, y] = target;
-        this.board[x][y] = "X";
-        // this.shotHistory.push({ target, hit }); 
-        // return hit; 
+    playerGetShot() {
+        let shotPosition;
+        let hit = false;
 
+        do {
+            shotPosition = this.getRandomPosition();
+            // Check if the shot position has already been fired at
+            hit = !this.shotHistory.some(shot => shot.target[0] === shotPosition[0] && shot.target[1] === shotPosition[1]);
+
+            if (hit) {
+                // Record the shot in history
+                const hitResult = this.board.checkHit(shotPosition);
+                this.shotHistory.push({ target: shotPosition, hit: hitResult });
+            }
+        } while (!hit); // Repeat until a new shot is fired
+
+        return shotPosition; // Return the position of the shot
     }
 
     isSunk() {

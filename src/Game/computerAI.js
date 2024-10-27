@@ -4,7 +4,9 @@ import Ship from './ship.js';
 export default class ComputerAI extends Player {
     constructor(name) {
         super(name); // No need to pass board here, it will be created in the Player class
+
     }
+
 
     // Automatically place ships on the board
     placeShipsAutomatically(shipTypes) {
@@ -58,26 +60,6 @@ export default class ComputerAI extends Player {
         }
 
         return true; 
-    }
-
-    // Fire a shot at a random position on the board
-    fireShot() {
-        let shotPosition;
-        let hit = false;
-
-        do {
-            shotPosition = this.getRandomPosition();
-            // Check if the shot position has already been fired at
-            hit = !this.shotHistory.some(shot => shot.target[0] === shotPosition[0] && shot.target[1] === shotPosition[1]);
-
-            if (hit) {
-                // Record the shot in history
-                const hitResult = this.board.checkHit(shotPosition);
-                this.shotHistory.push({ target: shotPosition, hit: hitResult });
-            }
-        } while (!hit); // Repeat until a new shot is fired
-
-        return shotPosition; // Return the position of the shot
     }
 
     // Get a random position within the board
