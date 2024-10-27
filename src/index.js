@@ -35,15 +35,13 @@ computerPlayer.initialize();
 // Load game states for both players
 playerOneBoard.loadGameState();
 computerPlayer.loadGameState();
-startGame();
 
-
+startGame()
 
 function startGame() {
     let isPlayerTurn = true; // Boolean to track whose turn it is
 
-    console.log("Game started!");
-    attackComputer([0, 1])
+    attackComputer([2,2])
 
     // Loop to continue until the game ends
     // while (true) {
@@ -72,12 +70,11 @@ function attackComputer(position) {
     // Update the computer's board
     computerPlayer.board.board[x][y] = "X";
     computerPlayer.saveGameState();
-
 }
 
 
-function computerAttacksPlayer(position) {
-    const [x, y] = position;
-
-    
+function computerAttacksPlayer() {
+    const [x, y] = computerPlayer.getRandomPosition();
+    playerOneBoard.board.board[x][y] = "X";
+    playerOneBoard.saveGameState();
 }
