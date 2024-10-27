@@ -70,6 +70,7 @@ function getPlayerInput() {
     });
 }
 
+// Updating the board for computer when the player attacks
 
 function playerAttackComputer(position) {
     const [x, y] = position;
@@ -84,73 +85,59 @@ function playerAttackComputer(position) {
     };
 
     const cellValue = computerPlayer.board.board[x][y];
+    let ship; // Declare ship variable outside of the switch
 
-    switch (cellValue) {
+    switch (cellValue) {   
         case "Battleship":
             console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
             computerPlayer.board.board[x][y] = "H";
             console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
-    
-            const battleship = computerPlayer.ships.find(s => s.type === "Battleship");
-            if (battleship) {
-                battleship.hit();
-            }
-            console.log(`Hit! You hit the ${battleship.type}. Total hits: ${battleship.hits}`);
+
+            ship = computerPlayer.ships.find(s => s.type === "Battleship");
             break;
-    
+
         case "carrier":
             console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
             computerPlayer.board.board[x][y] = "H";
             console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
-    
-            const carrier = computerPlayer.ships.find(s => s.type === "carrier");
-            if (carrier) {
-                carrier.hit();
-            }
-            console.log(`Hit! You hit the ${carrier.type}. Total hits: ${carrier.hits}`);
+
+            ship = computerPlayer.ships.find(s => s.type === "carrier");
             break;
-    
+
         case "Submarine":
             console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
             computerPlayer.board.board[x][y] = "H";
             console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
-    
-            const submarine = computerPlayer.ships.find(s => s.type === "Submarine");
-            if (submarine) {
-                submarine.hit();
-            }
-            console.log(`Hit! You hit the ${submarine.type}. Total hits: ${submarine.hits}`);
+
+            ship = computerPlayer.ships.find(s => s.type === "Submarine");
             break;
-    
+
         case "Destroyer":
             console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
             computerPlayer.board.board[x][y] = "H";
             console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
-    
-            const destroyer = computerPlayer.ships.find(s => s.type === "Destroyer");
-            if (destroyer) {
-                destroyer.hit();
-            }
-            console.log(`Hit! You hit the ${destroyer.type}. Total hits: ${destroyer.hits}`);
+
+            ship = computerPlayer.ships.find(s => s.type === "Destroyer");
             break;
-    
+
         case "Patrol Boat":
             console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
             computerPlayer.board.board[x][y] = "H";
             console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
-    
-            const patrolBoat = computerPlayer.ships.find(s => s.type === "Patrol Boat");
-            if (patrolBoat) {
-                patrolBoat.hit();
-            }
-            console.log(`Hit! You hit the ${patrolBoat.type}. Total hits: ${patrolBoat.hits}`);
+
+            ship = computerPlayer.ships.find(s => s.type === "Patrol Boat");
             break;
-    
+
         default:
             console.log("Missed or invalid target.");
-            break;
+            return; // Exit the function if it's a miss or invalid
     }
-    
+
+    // After the switch, handle the hit logic if a ship was found
+    if (ship) {
+        ship.hit();
+        console.log(`Hit! You hit the ${ship.type}. Total hits: ${ship.hits}`);
+    }
 
     console.log(computerPlayer.ships)
     computerPlayer.saveGameState();
@@ -158,7 +145,72 @@ function playerAttackComputer(position) {
 
 function computerAttacksPlayer() {
     const [x, y] = computerPlayer.getRandomPosition();
-    playerOneBoard.board.board[x][y] = "X";
+    
+    if(playerOneBoard.board.board[x][y] === null){
+        playerOneBoard.board.board[x][y] = "X";
+        return;
+    }
+    // Update the computer's board
+    if(playerOneBoard.board.board[x][y] === "X"){
+        console.log("Invalid! You have already hit this position!")
+    };
+
+    const cellValue = playerOneBoard.board.board[x][y];
+    let ship; // Declare ship variable outside of the switch
+
+    switch (cellValue) {   
+        case "Battleship":
+            console.log(`Before Hit: ${playerOneBoard.board.board[x][y]}`);
+            playerOneBoard.board.board[x][y] = "H";
+            console.log(`After Hit: ${playerOneBoard.board.board[x][y]}`);
+
+            ship = playerOneBoard.ships.find(s => s.type === "Battleship");
+            break;
+
+        case "carrier":
+            console.log(`Before Hit: ${playerOneBoard.board.board[x][y]}`);
+            playerOneBoard.board.board[x][y] = "H";
+            console.log(`After Hit: ${playerOneBoard.board.board[x][y]}`);
+
+            ship = playerOneBoard.ships.find(s => s.type === "carrier");
+            break;
+
+        case "Submarine":
+            console.log(`Before Hit: ${playerOneBoard.board.board[x][y]}`);
+            playerOneBoard.board.board[x][y] = "H";
+            console.log(`After Hit: ${playerOneBoard.board.board[x][y]}`);
+
+            ship = playerOneBoard.ships.find(s => s.type === "Submarine");
+            break;
+
+        case "Destroyer":
+            console.log(`Before Hit: ${playerOneBoard.board.board[x][y]}`);
+            playerOneBoard.board.board[x][y] = "H";
+            console.log(`After Hit: ${playerOneBoard.board.board[x][y]}`);
+
+            ship = playerOneBoard.ships.find(s => s.type === "Destroyer");
+            break;
+
+        case "Patrol Boat":
+            console.log(`Before Hit: ${playerOneBoard.board.board[x][y]}`);
+            playerOneBoard.board.board[x][y] = "H";
+            console.log(`After Hit: ${playerOneBoard.board.board[x][y]}`);
+
+            ship = playerOneBoard.ships.find(s => s.type === "Patrol Boat");
+            break;
+
+        default:
+            console.log("Missed or invalid target.");
+            return; // Exit the function if it's a miss or invalid
+    }
+
+    // After the switch, handle the hit logic if a ship was found
+    if (ship) {
+        ship.hit();
+        console.log(`Hit! You hit the ${ship.type}. Total hits: ${ship.hits}`);
+    }
+
+    console.log(playerOneBoard.ships)
     playerOneBoard.saveGameState();
 }
 

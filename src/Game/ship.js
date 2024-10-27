@@ -5,6 +5,7 @@ export default class Ship {
         this.position = position; 
         this.direction = direction;
         this.hits = 0; 
+        this.sunk = false;
     }
 
     hit() {
@@ -16,6 +17,7 @@ export default class Ship {
         }
     }
     isSunk() {
+        this.sunk = true;
         return this.hits >= this.length;
     }
 }
