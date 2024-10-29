@@ -43,7 +43,7 @@ export default class GameBoard {
             }
             for (let i = 0; i < shipSize; i++) {
                 if (this.board[x][y + i] !== null) {
-                    return false; 
+                    return "Occupied"; 
                 }
             }
             for (let i = 0; i < shipSize; i++) {
@@ -55,7 +55,7 @@ export default class GameBoard {
             }
             for (let i = 0; i < shipSize; i++) {
                 if (this.board[x + i][y] !== null) {
-                    return false; 
+                    return "Occupied";
                 }
             }
             for (let i = 0; i < shipSize; i++) {
