@@ -98,7 +98,7 @@ function playerAttackComputer(position) {
             ship = computerPlayer.ships.find(s => s.type === "Battleship");
             break;
 
-        case "carrier":
+        case "Carrier":
             console.log(`Before Hit: ${computerPlayer.board.board[x][y]}`);
             computerPlayer.board.board[x][y] = "H";
             console.log(`After Hit: ${computerPlayer.board.board[x][y]}`);
@@ -172,7 +172,7 @@ function computerAttacksPlayer() {
             ship = playerOneBoard.ships.find(s => s.type === "Battleship");
             break;
 
-        case "carrier":
+        case "Carrier":
             console.log(`Before Hit: ${playerOneBoard.board.board[x][y]}`);
             playerOneBoard.board.board[x][y] = "H";
             console.log(`After Hit: ${playerOneBoard.board.board[x][y]}`);
