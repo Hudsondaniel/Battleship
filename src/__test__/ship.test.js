@@ -1,23 +1,23 @@
-// src/Game/ship.test.js
-import Ship from '../Game/ship'; // Correct import path and class name
+import Ship from '../Game/ship'; 
 
 describe('Ship class', () => {
     let ship;
 
     beforeEach(() => {
-        ship = new Ship('Battleship', 4, [0, 0]); // Use number for length
+        ship = new Ship('Battleship', 4, [0, 0], 'horizontal'); 
     });
 
     test('should initialize with correct properties', () => {
-        expect(ship.type).toBe('Battleship'); // Correct property name
-        expect(ship.length).toBe(4); // Use number
+        expect(ship.type).toBe('Battleship'); 
+        expect(ship.length).toBe(4); 
         expect(ship.position).toEqual([0, 0]);
         expect(ship.hits).toBe(0);
+        expect(ship.direction).toBe('horizontal');
     });
 
     test('should register a hit correctly', () => {
         ship.hit();
-        expect(ship.hits).toBe(1); // Check hits property, not method
+        expect(ship.hits).toBe(1); 
     });
 
     test('should be sunk after all hits', () => {
