@@ -43,14 +43,16 @@ async function startGame() {
     
     while(true){
         if (isPlayerTurn) {
-            console.log("Choose a position to attack:");
+            console.log("Player Choose a position to attack:");
             const position = await getPlayerInput(); // Function to get input asynchronously
             playerAttackComputer(position);
-        } else {
-            console.log("Computer's turn...");
+        } 
+        
+        if (!isPlayerTurn){
+            console.log("Computer is choosing a spot to attack:");
             computerAttacksPlayer();
         }
-    
+        console.log(isPlayerTurn);
         // Toggle the turn
         isPlayerTurn = !isPlayerTurn;
     
@@ -136,7 +138,7 @@ function playerAttackComputer(position) {
     // After the switch, handle the hit logic if a ship was found
     if (ship) {
         ship.hit();
-        console.log(`Hit! You hit the ${ship.type}. Total hits: ${ship.hits}`);
+        console.log(`Hit! Player hit the ${ship.type}. Total hits: ${ship.hits}`);
     }
 
     console.log(computerPlayer.ships)
@@ -145,18 +147,21 @@ function playerAttackComputer(position) {
 
 function computerAttacksPlayer() {
     const [x, y] = computerPlayer.getRandomPosition();
-    
+    console.log([x, y]);
     if(playerOneBoard.board.board[x][y] === null){
         playerOneBoard.board.board[x][y] = "X";
+        console.log("Marked a NULL spot!")
         return;
     }
-    // Update the computer's board
+    
+    // Update the players board
     if(playerOneBoard.board.board[x][y] === "X"){
         console.log("Invalid! You have already hit this position!")
     };
 
     const cellValue = playerOneBoard.board.board[x][y];
-    let ship; // Declare ship variable outside of the switch
+    console.log(cellValue)
+    let ship; 
 
     switch (cellValue) {   
         case "Battleship":
@@ -207,9 +212,9 @@ function computerAttacksPlayer() {
     // After the switch, handle the hit logic if a ship was found
     if (ship) {
         ship.hit();
-        console.log(`Hit! You hit the ${ship.type}. Total hits: ${ship.hits}`);
+        console.log(`Hit! Computer hit the ${ship.type}. Total hits: ${ship.hits}`);
     }
-
+    console.log("This is players ships")
     console.log(playerOneBoard.ships)
     playerOneBoard.saveGameState();
 }
