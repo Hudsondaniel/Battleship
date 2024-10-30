@@ -19,7 +19,4 @@ export default class Ship {
         return this.hits >= this.length;
     }
 
-    allShipSunk(){
-        
-    }
 }

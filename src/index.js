@@ -161,6 +161,18 @@ function computerAttacksPlayer() {
     return "Invalid";
 }
 
+function allPlayerShipSunk(){
+    return playerOneBoard.ships.every(ship => ship.isSunk());
+}
+
+function allComputerShipSunk(){
+    return computerPlayer.ships.every(ship => ship.isSunk());
+}
+
+function isGameOver(){
+    return allPlayerShipSunk() || allComputerShipSunk();
+}
+
 function newGame(){
     // Reset game board and players
     localStorage.clear();
