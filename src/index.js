@@ -5,7 +5,7 @@ import Ship from './Game/ship.js';
 import ComputerAI from './Game/computerAI.js';
 import Game from './Game/game.js';
 
-
+newGame()
 // Initiate game UI to which You would be adding the backend details
 createGameBoard('player1-grid', 10);  
 createGameBoard('player2-grid', 10);
@@ -98,6 +98,7 @@ function playerAttackComputer(position) {
         case "Patrol Boat":
             computerPlayer.board.board[x][y] = "H";
             ship = computerPlayer.ships.find(s => s.type === cellValue);
+            console.log(ship);
             break;
         default:
             return "Invalid";
@@ -105,6 +106,7 @@ function playerAttackComputer(position) {
 
     if (ship) {
         ship.hit();
+        console.log(ship);
         computerPlayer.saveGameState();
         return "Hit";
     }
@@ -131,6 +133,7 @@ function computerAttacksPlayer() {
         case "Patrol Boat":
             playerOneBoard.board.board[x][y] = "H";
             ship = playerOneBoard.ships.find(s => s.type === cellValue);
+            console.log(ship);
             break;
         default:
             console.log("Invalid Moves");
@@ -139,6 +142,7 @@ function computerAttacksPlayer() {
 
     if (ship) {
         ship.hit();
+        console.log(ship);
         playerOneBoard.saveGameState();
         return "Hit";
     }
@@ -161,13 +165,12 @@ function isGameOver() {
 
 function declareWinner() {
     if (allPlayerShipSunk()) {
-        console.log("Computer wins!");
+        alert("Computer wins!");
     } else {
-        console.log("Player wins!");
+        alert("Player wins!");
     }
 }
 
 function newGame() {
-    // Reset game board and players
     localStorage.clear();
 }

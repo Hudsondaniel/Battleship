@@ -8,7 +8,8 @@ export default class Ship {
     }
 
     hit() {
-        this.hits++; 
+        this.hits = this.hits + 1; 
+        console.log(`${this.type} hit count: ${this.hits}`);
         if (this.isSunk()) {
             console.log(`${this.type} ship sunk!`);
         } else {
