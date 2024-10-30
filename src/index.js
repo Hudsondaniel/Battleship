@@ -5,6 +5,7 @@ import Ship from './Game/ship.js';
 import ComputerAI from './Game/computerAI.js';
 import Game from './Game/game.js';
 
+
 // Initiate game UI to which You would be adding the backend details
 createGameBoard('player1-grid', 10);  
 createGameBoard('player2-grid', 10);
@@ -39,28 +40,33 @@ startGame();
 
 async function startGame() {
     let isPlayerTurn = true;
-    
-    while(true){
+
+    while (true) {
         if (isPlayerTurn) {
             console.log("Player Choose a position to attack:");
             const position = await getPlayerInput(); // Function to get input asynchronously
-            playerAttackComputer(position);
-        } 
-        
-        if (!isPlayerTurn){
+            const attackResult = playerAttackComputer(position);
+            console.log(attackResult); // Log the result of the attack
+            
+            // Check if the game is over after the player's attack
+            if (isGameOver()) {
+                declareWinner();
+                break; // Exit the loop if the game is over
+            }
+        } else {
             console.log("Computer is choosing a spot to attack:");
-            computerAttacksPlayer();
+            const attackResult = computerAttacksPlayer();
+            console.log(attackResult); // Log the result of the attack
+            
+            // Check if the game is over after the computer's attack
+            if (isGameOver()) {
+                declareWinner();
+                break; // Exit the loop if the game is over
+            }
         }
-        console.log(isPlayerTurn);
+
         // Toggle the turn
         isPlayerTurn = !isPlayerTurn;
-    
-        // Check for game over conditions
-        // if (!isGameOver()) {
-        //     nextTurn(); // Call the next turn if the game isn't over
-        // } else {
-        //     declareWinner(); // Handle declaring the winner
-        // }
     }
 }
 
@@ -72,12 +78,12 @@ function getPlayerInput() {
 }
 
 // Updating the board for computer when the player attacks
-
 function playerAttackComputer(position) {
     const [x, y] = position;
 
     if (computerPlayer.board.board[x][y] === null) {
         computerPlayer.board.board[x][y] = "X";
+        computerPlayer.saveGameState(); // Save game state after the attack
         return "Miss";
     }
 
@@ -86,24 +92,12 @@ function playerAttackComputer(position) {
 
     switch (cellValue) {   
         case "Battleship":
-            computerPlayer.board.board[x][y] = "H";
-            ship = computerPlayer.ships.find(s => s.type === "Battleship");
-            break;
-        case "Carrier":
-            computerPlayer.board.board[x][y] = "H";
-            ship = computerPlayer.ships.find(s => s.type === "carrier");
-            break;
+        case "carrier":
         case "Submarine":
-            computerPlayer.board.board[x][y] = "H";
-            ship = computerPlayer.ships.find(s => s.type === "Submarine");
-            break;
         case "Destroyer":
-            computerPlayer.board.board[x][y] = "H";
-            ship = computerPlayer.ships.find(s => s.type === "Destroyer");
-            break;
         case "Patrol Boat":
             computerPlayer.board.board[x][y] = "H";
-            ship = computerPlayer.ships.find(s => s.type === "Patrol Boat");
+            ship = computerPlayer.ships.find(s => s.type === cellValue);
             break;
         default:
             return "Invalid";
@@ -122,6 +116,7 @@ function computerAttacksPlayer() {
 
     if (playerOneBoard.board.board[x][y] === null) {
         playerOneBoard.board.board[x][y] = "X";
+        playerOneBoard.saveGameState(); // Save game state after the attack
         return "Miss";
     }
 
@@ -130,26 +125,15 @@ function computerAttacksPlayer() {
 
     switch (cellValue) {   
         case "Battleship":
-            playerOneBoard.board.board[x][y] = "H";
-            ship = playerOneBoard.ships.find(s => s.type === "Battleship");
-            break;
-        case "Carrier":
-            playerOneBoard.board.board[x][y] = "H";
-            ship = playerOneBoard.ships.find(s => s.type === "carrier");
-            break;
+        case "carrier":
         case "Submarine":
-            playerOneBoard.board.board[x][y] = "H";
-            ship = playerOneBoard.ships.find(s => s.type === "Submarine");
-            break;
         case "Destroyer":
-            playerOneBoard.board.board[x][y] = "H";
-            ship = playerOneBoard.ships.find(s => s.type === "Destroyer");
-            break;
         case "Patrol Boat":
             playerOneBoard.board.board[x][y] = "H";
-            ship = playerOneBoard.ships.find(s => s.type === "Patrol Boat");
+            ship = playerOneBoard.ships.find(s => s.type === cellValue);
             break;
         default:
+            console.log("Invalid Moves");
             return "Invalid";
     }
 
@@ -161,19 +145,29 @@ function computerAttacksPlayer() {
     return "Invalid";
 }
 
-function allPlayerShipSunk(){
+function allPlayerShipSunk() {
+    console.log(playerOneBoard.ships)
     return playerOneBoard.ships.every(ship => ship.isSunk());
 }
 
-function allComputerShipSunk(){
+function allComputerShipSunk() {
+    console.log(computerPlayer.ships)
     return computerPlayer.ships.every(ship => ship.isSunk());
 }
 
-function isGameOver(){
+function isGameOver() {
     return allPlayerShipSunk() || allComputerShipSunk();
 }
 
-function newGame(){
+function declareWinner() {
+    if (allPlayerShipSunk()) {
+        console.log("Computer wins!");
+    } else {
+        console.log("Player wins!");
+    }
+}
+
+function newGame() {
     // Reset game board and players
     localStorage.clear();
 }
