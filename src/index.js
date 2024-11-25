@@ -4,6 +4,7 @@ import Player from './Game/player.js';
 import Ship from './Game/ship.js';
 import ComputerAI from './Game/computerAI.js';
 
+
 // Initiate game UI
 createGameBoard('player1-grid', 10);  
 createGameBoard('player2-grid', 10);
@@ -88,12 +89,22 @@ function playerAttackComputer(position) {
         return "Position already attacked";
     }
 
+    // Select the corresponding cell in the player2-grid
+    const targetCell = document.querySelector(`#player2-grid-cell-${x}-${y}`);
+
     const cellValue = computerPlayer.board.board[x][y];
 
     // Miss
     if (cellValue === null) {
         computerPlayer.board.board[x][y] = "X";
         computerPlayer.saveGameState();
+        
+        // Mark the cell as a miss on the UI
+        if (targetCell) {
+            targetCell.classList.add('miss');
+            targetCell.textContent = 'X';
+        }
+        
         return "Miss";
     }
 
@@ -103,6 +114,12 @@ function playerAttackComputer(position) {
         computerPlayer.board.board[x][y] = "H";
         ship.hit();
         computerPlayer.saveGameState();
+        
+        // Mark the cell as a hit on the UI
+        if (targetCell) {
+            targetCell.classList.add('hit');
+            targetCell.textContent = 'H';
+        }
         
         if (ship.isSunk()) {
             return `Sunk ${ship.type}!`;
@@ -121,12 +138,22 @@ function computerAttacksPlayer() {
         return computerAttacksPlayer(); // Try again with a new position
     }
 
+    // Select the corresponding cell in the player1-grid
+    const targetCell = document.querySelector(`#player1-grid-cell-${x}-${y}`);
+
     const cellValue = playerOneBoard.board.board[x][y];
 
     // Miss
     if (cellValue === null) {
         playerOneBoard.board.board[x][y] = "X";
         playerOneBoard.saveGameState();
+        
+        // Mark the cell as a miss on the UI
+        if (targetCell) {
+            targetCell.classList.add('miss');
+            targetCell.textContent = 'X';
+        }
+        
         return "Miss";
     }
 
@@ -136,6 +163,12 @@ function computerAttacksPlayer() {
         playerOneBoard.board.board[x][y] = "H";
         ship.hit();
         playerOneBoard.saveGameState();
+        
+        // Mark the cell as a hit on the UI
+        if (targetCell) {
+            targetCell.classList.add('hit');
+            targetCell.textContent = 'H';
+        }
         
         if (ship.isSunk()) {
             return `Sunk ${ship.type}!`;

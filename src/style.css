@@ -117,3 +117,15 @@ nav img{
     font-weight: 800;
     color: rgba(53, 53, 53, 0.596);
 }
+
+.cell.miss {
+    background-color: lightgray;
+    color: rgb(252, 145, 6);
+    font-weight: bold;
+}
+
+.cell.hit {
+    background-color: red;
+    color: rgba(255, 0, 0, 0.336);
+    font-weight: bold;
+}
