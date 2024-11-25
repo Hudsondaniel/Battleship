@@ -4,217 +4,124 @@ import Player from './Game/player.js';
 import Ship from './Game/ship.js';
 import ComputerAI from './Game/computerAI.js';
 
-
-// Initiate game UI
-createGameBoard('player1-grid', 10);  
+// Create game boards
+createGameBoard('player1-grid', 10);
 createGameBoard('player2-grid', 10);
 
+// Initialize players
 const playerOneBoard = new Player("Hudson", [
-    new Ship('Carrier', 5, [0, 0], 'vertical'),      
-    new Ship('Battleship', 4, [0, 3], 'horizontal'), 
-    new Ship('Destroyer', 3, [6, 0], 'vertical'),    
-    new Ship('Submarine', 3, [4, 4], 'horizontal'),  
-    new Ship('Patrol Boat', 2, [7, 7], 'vertical'),  
+    new Ship('Carrier', 5, [0, 0], 'vertical'),
+    new Ship('Battleship', 4, [0, 3], 'horizontal'),
+    new Ship('Destroyer', 3, [6, 0], 'vertical'),
+    new Ship('Submarine', 3, [4, 4], 'horizontal'),
+    new Ship('Patrol Boat', 2, [7, 7], 'vertical'),
 ]);
 
 playerOneBoard.placeShipPlayer();
+console.log(playerOneBoard.board)
 
 const computerPlayer = new ComputerAI('computer');
 computerPlayer.placeShipsAutomatically([
-    {name: 'Carrier', length: 5},
-    {name: 'Battleship', length: 4},
-    {name: 'Destroyer', length: 3},
-    {name: 'Submarine', length: 3},
-    {name: 'Patrol Boat', length: 2}
+    { name: 'Carrier', length: 5 },
+    { name: 'Battleship', length: 4 },
+    { name: 'Destroyer', length: 3 },
+    { name: 'Submarine', length: 3 },
+    { name: 'Patrol Boat', length: 2 },
 ]);
 
+// Setup initial states
 playerOneBoard.initialize();
 computerPlayer.initialize();
 
-// Load game states for both players
-playerOneBoard.loadGameState();
-computerPlayer.loadGameState();
+let isPlayerTurn = true;
+let gameActive = true;
 
-startGame();
+// Event handlers
+document.getElementById('player2-grid').addEventListener('click', handlePlayerAttack);
+document.getElementById('new-game-button').addEventListener('click', newGame);
 
-async function startGame() {
-    let isPlayerTurn = true;
-    let gameActive = true;
+function handlePlayerAttack(event) {
+    if (!gameActive || !isPlayerTurn) return;
 
-    while (gameActive) {
-        if (isPlayerTurn) {
-            console.log("Player Choose a position to attack:");
-            const position = await getPlayerInput();
-            const attackResult = playerAttackComputer(position);
-            console.log(`Player attack result: ${attackResult}`);
-            
-            if (isGameOver()) {
-                gameActive = false;
-                declareWinner();
-                break;
-            }
-        } else {
-            console.log("Computer is choosing a spot to attack:");
-            const attackResult = computerAttacksPlayer();
-            console.log(`Computer attack result: ${attackResult}`);
-            
-            if (isGameOver()) {
-                gameActive = false;
-                declareWinner();
-                break;
-            }
-        }
+    const cell = event.target;
+    const position = parseCellId(cell.id);
 
-        isPlayerTurn = !isPlayerTurn;
+    if (!position || cell.classList.contains('hit') || cell.classList.contains('miss')) {
+        alert('Invalid move or position already attacked.');
+        return;
     }
-}
 
-function getPlayerInput() {
-    return new Promise((resolve) => {
-        const position = prompt("Enter your attack coordinates (e.g., 0,1):");
-        resolve(position.split(',').map(Number));
-    });
-}
-
-function playerAttackComputer(position) {
     const [x, y] = position;
-    
-    // Validate position
-    if (x < 0 || x >= 10 || y < 0 || y >= 10) {
-        return "Invalid position";
-    }
+    const result = processAttack(computerPlayer, x, y, cell);
 
-    // Check if position was already attacked
-    if (computerPlayer.board.board[x][y] === "X" || computerPlayer.board.board[x][y] === "H") {
-        return "Position already attacked";
-    }
+    console.log(`Player attack result: ${result}`);
+    if (checkGameOver()) return;
 
-    // Select the corresponding cell in the player2-grid
-    const targetCell = document.querySelector(`#player2-grid-cell-${x}-${y}`);
-
-    const cellValue = computerPlayer.board.board[x][y];
-
-    // Miss
-    if (cellValue === null) {
-        computerPlayer.board.board[x][y] = "X";
-        computerPlayer.saveGameState();
-        
-        // Mark the cell as a miss on the UI
-        if (targetCell) {
-            targetCell.classList.add('miss');
-            targetCell.textContent = 'X';
-        }
-        
-        return "Miss";
-    }
-
-    // Hit
-    const ship = computerPlayer.ships.find(s => s.type === cellValue);
-    if (ship) {
-        computerPlayer.board.board[x][y] = "H";
-        ship.hit();
-        computerPlayer.saveGameState();
-        
-        // Mark the cell as a hit on the UI
-        if (targetCell) {
-            targetCell.classList.add('hit');
-            targetCell.textContent = 'H';
-        }
-        
-        if (ship.isSunk()) {
-            return `Sunk ${ship.type}!`;
-        }
-        return "Hit!";
-    }
-
-    return "Invalid";
+    isPlayerTurn = false;
+    setTimeout(handleComputerAttack, 1000);
 }
 
-function computerAttacksPlayer() {
+function handleComputerAttack() {
+    if (!gameActive || isPlayerTurn) return;
+
     const [x, y] = computerPlayer.getRandomPosition();
-    
-    // Check if position was already attacked
-    if (playerOneBoard.board.board[x][y] === "X" || playerOneBoard.board.board[x][y] === "H") {
-        return computerAttacksPlayer(); // Try again with a new position
-    }
+    const cell = document.getElementById(`player1-grid-cell-${x}-${y}`);
+    const result = processAttack(playerOneBoard, x, y, cell);
 
-    // Select the corresponding cell in the player1-grid
-    const targetCell = document.querySelector(`#player1-grid-cell-${x}-${y}`);
+    console.log(`Computer attack result: ${result}`);
+    if (checkGameOver()) return;
 
-    const cellValue = playerOneBoard.board.board[x][y];
+    isPlayerTurn = true;
+}
 
-    // Miss
+function processAttack(player, x, y, cell) {
+    const board = player.board.board;
+    const cellValue = board[x][y];
+
     if (cellValue === null) {
-        playerOneBoard.board.board[x][y] = "X";
-        playerOneBoard.saveGameState();
-        
-        // Mark the cell as a miss on the UI
-        if (targetCell) {
-            targetCell.classList.add('miss');
-            targetCell.textContent = 'X';
-        }
-        
+        board[x][y] = "X";
+        cell.classList.add('miss');
+        cell.textContent = 'X';
         return "Miss";
     }
 
-    // Hit
-    const ship = playerOneBoard.ships.find(s => s.type === cellValue);
+    const ship = player.ships.find(s => s.type === cellValue);
     if (ship) {
-        playerOneBoard.board.board[x][y] = "H";
+        board[x][y] = "H";
         ship.hit();
-        playerOneBoard.saveGameState();
-        
-        // Mark the cell as a hit on the UI
-        if (targetCell) {
-            targetCell.classList.add('hit');
-            targetCell.textContent = 'H';
-        }
-        
-        if (ship.isSunk()) {
-            return `Sunk ${ship.type}!`;
-        }
+        cell.classList.add('hit');
+        cell.textContent = 'H';
+
+        if (ship.isSunk()) return `Sunk ${ship.type}!`;
         return "Hit!";
     }
 
     return "Invalid";
 }
 
-function allPlayerShipSunk() {
-    return playerOneBoard.ships.every(ship => {
-        const sunk = ship.isSunk();
-        console.log(`${ship.type}: ${ship.hits}/${ship.length} hits, Sunk: ${sunk}`);
-        return sunk;
-    });
+function parseCellId(cellId) {
+    const match = cellId.match(/player2-grid-cell-(\d+)-(\d+)/);
+    return match ? [parseInt(match[1]), parseInt(match[2])] : null;
 }
 
-function allComputerShipSunk() {
-    return computerPlayer.ships.every(ship => {
-        const sunk = ship.isSunk();
-        console.log(`${ship.type}: ${ship.hits}/${ship.length} hits, Sunk: ${sunk}`);
-        return sunk;
-    });
-}
+function checkGameOver() {
+    const playerLost = playerOneBoard.ships.every(ship => ship.isSunk());
+    const computerLost = computerPlayer.ships.every(ship => ship.isSunk());
 
-function isGameOver() {
-    console.log("\nChecking player ships:");
-    const playerLost = allPlayerShipSunk();
-    
-    console.log("\nChecking computer ships:");
-    const computerLost = allComputerShipSunk();
-    
-    return playerLost || computerLost;
-}
-
-function declareWinner() {
-    if (allPlayerShipSunk()) {
-        alert("Computer wins!");
-    } else {
-        alert("Player wins!");
+    if (playerLost || computerLost) {
+        gameActive = false;
+        declareWinner(playerLost ? 'Computer' : 'Player');
+        return true;
     }
+
+    return false;
+}
+
+function declareWinner(winner) {
+    alert(`${winner} wins!`);
 }
 
 function newGame() {
     localStorage.clear();
     location.reload();
 }
-
