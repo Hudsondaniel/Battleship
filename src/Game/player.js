@@ -29,7 +29,8 @@ export default class Player {
                 type: ship.type,
                 length: ship.length,
                 position: ship.position,
-                direction: ship.direction
+                direction: ship.direction,
+                hits: ship.hits,
             })),
             shotHistory: this.shotHistory
         };
