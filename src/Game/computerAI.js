@@ -3,7 +3,7 @@ import Ship from './ship.js';
 
 export default class ComputerAI extends Player {
     constructor(name) {
-        super(name); // No need to pass board here, it will be created in the Player class
+        super(name); 
 
     }
 
