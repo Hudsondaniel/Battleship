@@ -186,3 +186,21 @@ nav img{
         opacity: 1;
     }
 }
+
+.ship {
+    background-color: rgba(128, 128, 128, 0.5); /* Light gray background for ships */
+    border-radius: 10px; /* Rounded corners */
+    position: relative; /* Allow dots to be positioned */
+}
+
+.ship::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: #aaa7a7; /* Darker dot color */
+    border-radius: 50%; /* Make it circular */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

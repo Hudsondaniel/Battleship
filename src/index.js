@@ -91,25 +91,28 @@ function processAttack(player, x, y, cell) {
     const cellValue = board[x][y];
 
     if (cellValue === null) {
+        // Miss
         board[x][y] = "X";
+        cell.classList.remove('ship');  // Remove ship styling
         cell.classList.add('miss');
         cell.textContent = 'X';
         return "Miss";
     }
 
+    // If the cell has a ship
     const ship = player.ships.find(s => s.type === cellValue);
     if (ship) {
         board[x][y] = "H";
         ship.hit();
+        cell.classList.remove('ship');  // Remove ship styling
         cell.classList.add('hit');
         cell.textContent = 'H';
-
-        if (ship.isSunk()) return `Sunk ${ship.type}!`;
-        return "Hit!";
+        return ship.isSunk() ? `Sunk ${ship.type}!` : "Hit!";
     }
 
     return "Invalid";
 }
+
 
 function parseCellId(cellId) {
     const match = cellId.match(/player2-grid-cell-(\d+)-(\d+)/);
@@ -155,9 +158,10 @@ function renderGameState(player, gridId, hideShips = false) {
                 cell.classList.add('hit');
                 cell.textContent = 'H';
             } else if (cellValue && !hideShips) {
-                cell.textContent = cellValue; // Show ship type for debugging
                 cell.classList.add('ship');
+                cell.style.backgroundColor = '#cacbd8';
             }
         }
     }
 }
+
