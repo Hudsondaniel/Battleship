@@ -17,22 +17,28 @@ const playerOneBoard = new Player("Hudson", [
     new Ship('Patrol Boat', 2, [7, 7], 'vertical'),
 ]);
 
-playerOneBoard.placeShipPlayer();
-console.log(playerOneBoard.board)
-
 const computerPlayer = new ComputerAI('computer');
-computerPlayer.placeShipsAutomatically([
-    { name: 'Carrier', length: 5 },
-    { name: 'Battleship', length: 4 },
-    { name: 'Destroyer', length: 3 },
-    { name: 'Submarine', length: 3 },
-    { name: 'Patrol Boat', length: 2 },
-]);
+
+// Load game state if available, otherwise initialize
+if (localStorage.getItem(playerOneBoard.name)) {
+    playerOneBoard.loadGameState();
+    computerPlayer.loadGameState();
+    renderGameState(playerOneBoard, 'player1-grid');
+    renderGameState(computerPlayer, 'player2-grid', true); // Hide computer ships
+} else {
+    playerOneBoard.placeShipPlayer();
+    computerPlayer.placeShipsAutomatically([
+        { name: 'Carrier', length: 5 },
+        { name: 'Battleship', length: 4 },
+        { name: 'Destroyer', length: 3 },
+        { name: 'Submarine', length: 3 },
+        { name: 'Patrol Boat', length: 2 },
+    ]);
+    playerOneBoard.saveGameState();
+    computerPlayer.saveGameState();
+}
 
 // Setup initial states
-playerOneBoard.initialize();
-computerPlayer.initialize();
-
 let isPlayerTurn = true;
 let gameActive = true;
 
@@ -55,6 +61,9 @@ function handlePlayerAttack(event) {
     const result = processAttack(computerPlayer, x, y, cell);
 
     console.log(`Player attack result: ${result}`);
+    playerOneBoard.saveGameState(); // Save after attack
+    computerPlayer.saveGameState(); // Save after attack
+
     if (checkGameOver()) return;
 
     isPlayerTurn = false;
@@ -69,6 +78,9 @@ function handleComputerAttack() {
     const result = processAttack(playerOneBoard, x, y, cell);
 
     console.log(`Computer attack result: ${result}`);
+    playerOneBoard.saveGameState(); // Save after attack
+    computerPlayer.saveGameState(); // Save after attack
+
     if (checkGameOver()) return;
 
     isPlayerTurn = true;
@@ -124,4 +136,28 @@ function declareWinner(winner) {
 function newGame() {
     localStorage.clear();
     location.reload();
+}
+
+// Render the game state onto the grid
+function renderGameState(player, gridId, hideShips = false) {
+    const board = player.board.board;
+    const grid = document.getElementById(gridId);
+
+    for (let x = 0; x < board.length; x++) {
+        for (let y = 0; y < board[x].length; y++) {
+            const cell = document.getElementById(`${gridId}-cell-${x}-${y}`);
+            const cellValue = board[x][y];
+
+            if (cellValue === "X") {
+                cell.classList.add('miss');
+                cell.textContent = 'X';
+            } else if (cellValue === "H") {
+                cell.classList.add('hit');
+                cell.textContent = 'H';
+            } else if (cellValue && !hideShips) {
+                cell.textContent = cellValue; // Show ship type for debugging
+                cell.classList.add('ship');
+            }
+        }
+    }
 }

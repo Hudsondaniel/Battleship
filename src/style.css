@@ -118,6 +118,38 @@ nav img{
     color: rgba(53, 53, 53, 0.596);
 }
 
+#player1-grid .miss {
+    background-color: #eaf6ff; /* Light blue background for misses */
+    color: #5dade2; /* Light blue emoji color */
+    text-align: center;
+    font-weight: bold;
+    animation: miss-fade 0.5s ease-in-out;
+    border: 2px dashed #a9d6f1; /* Light dashed blue border */
+}
+
+#player1-grid .miss::before {
+    content: "🔵"; /* Blue circle for misses */
+    font-size: 1rem;
+    position: absolute;
+}
+
+/* Player 2 Grid - Medium Gray Misses */
+#player2-grid .miss {
+    background-color: #dfe3e6; /* Medium gray background for misses */
+    color: #7f8c8d; /* Medium gray emoji color */
+    text-align: center;
+    font-weight: bold;
+    animation: miss-fade 0.5s ease-in-out;
+    border: 2px dashed #bdc3c7; /* Subtle gray dashed border */
+}
+
+#player2-grid .miss::before {
+    content: "⚫"; /* Gray circle for misses */
+    font-size: 1rem;
+    position: absolute;
+}
+
+/* Shared Hit Styles */
 .hit {
     background-color: #ff4c4c; /* Bright red for hit */
     color: white;
@@ -127,6 +159,13 @@ nav img{
     border: 2px solid #ff1a1a;
 }
 
+.hit::before {
+    content: "🔴"; /* Red circle for hits */
+    font-size: 1rem;
+    position: absolute;
+}
+
+/* Shared Animations */
 @keyframes hit-glow {
     0% {
         box-shadow: 0 0 5px rgba(255, 76, 76, 0.3);
@@ -139,15 +178,6 @@ nav img{
     }
 }
 
-.miss {
-    background-color: #7f8c8d; /* Grayish-blue for miss */
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    animation: miss-fade 0.5s ease-in-out;
-    border: 2px dashed #bdc3c7;
-}
-
 @keyframes miss-fade {
     0% {
         opacity: 0.5;
@@ -155,16 +185,4 @@ nav img{
     100% {
         opacity: 1;
     }
-}
-
-.hit::before {
-    content: "🔥"; /* Explosion for hit */
-    font-size: 1.2rem;
-    position: absolute;
-}
-
-.miss::before {
-    content: "❌"; /* Water splash for miss */
-    font-size: 1.2rem;
-    position: absolute;
 }
