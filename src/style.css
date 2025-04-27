@@ -204,3 +204,285 @@ nav img{
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: #fff;
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 600px;
+    margin: 2rem auto;
+    overflow-y: auto;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#start-modal {
+    display: flex;
+}
+#game-modal {
+    display: none;
+}
+#game-modal.active, #start-modal.active {
+    display: flex;
+}
+#new-game-button {
+    background: #e72660fa;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: background 0.2s;
+}
+#new-game-button:hover {
+    background: #c41d4d;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+    .gameboard {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .heading-text-one, .heading-text-two {
+        margin-left: 1vw;
+        margin-right: 1vw;
+    }
+}
+@media (max-width: 700px) {
+    .gameboard {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .player-1, .player-2 {
+        padding: 0;
+        border: none;
+    }
+    nav {
+        flex-direction: column;
+        height: auto;
+        padding: 0.5rem;
+    }
+    .battleship-heading {
+        border: none;
+        padding-left: 0;
+        margin-top: 0.5rem;
+    }
+    #new-game-button {
+        margin: 1rem 0 0 0;
+        width: 100%;
+    }
+    .modal-content {
+        padding: 1rem;
+        max-width: 98vw;
+    }
+    .placement-modal-stack .gameboard-grid {
+        margin-bottom: 1.2rem;
+    }
+    .placement-modal-stack #ship-list {
+        margin-bottom: 1.2rem;
+    }
+}
+@media (max-width: 500px) {
+    .gameboard-grid {
+        grid-template-columns: repeat(11, 3vw);
+        grid-template-rows: repeat(11, 3vw);
+        gap: 0.2rem;
+    }
+    .modal-content {
+        padding: 1rem;
+    }
+}
+
+#ship-placement-panel {
+    margin: 1.5rem 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+#player1-grid {
+    margin-bottom: 2.5rem;
+}
+#ship-list {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    max-width: 500px;
+}
+#ship-list li {
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    background: #e8e8e8;
+    cursor: pointer;
+    font-weight: 600;
+    border: 2px solid transparent;
+    transition: border 0.2s, background 0.2s;
+    margin-bottom: 0.5rem;
+}
+#ship-list li.selected {
+    border: 2px solid #e72660fa;
+    background: #fbe3ec;
+}
+#ship-list li.placed {
+    opacity: 0.5;
+    background: #b9b9b9;
+    cursor: not-allowed;
+}
+#rotate-ship-button, #reset-placement-button {
+    margin-bottom: 1rem;
+}
+
+
+.placement-ok {
+    background-color: #a8e3fd !important;
+    outline: 2px solid #4caf50;
+}
+.placement-bad {
+    background-color: #ffb3b3 !important;
+    outline: 2px solid #e72660fa;
+}
+
+#reset-placement-button, #rotate-ship-button, #start-game-button {
+    background: #ff9800;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#reset-placement-button:hover {
+    background: #e65100;
+}
+
+/* Shake animation for invalid placement */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+    100% { transform: translateX(0); }
+}
+.shake {
+    animation: shake 0.4s;
+}
+
+.placement-grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+#start-modal .gameboard-grid {
+    margin: 0 auto;
+    max-width: 90vw;
+    max-height: 40vh;
+    grid-template-columns: repeat(11, 3.2vw);
+    grid-template-rows: repeat(11, 3.2vw);
+    gap: 0.18rem;
+}
+
+#ship-placement-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    z-index: 1;
+    width: 100%;
+}
+#ship-placement-buttons button {
+    width: auto;
+    min-width: 120px;
+    max-width: 220px;
+    align-self: stretch;
+    margin: 0;
+    padding: 0.5rem 1.2rem;
+    box-sizing: border-box;
+}
+
+#start-game-button, #reset-placement-button, #rotate-ship-button {
+    margin: 0;
+}
+
+.placement-modal-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.placement-modal-stack .gameboard-grid {
+    margin-bottom: 2rem;
+}
+.placement-modal-stack #ship-list {
+    margin-bottom: 0.5rem;
+}
+
+.modal-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 900px;
+}
+.modal-left {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 220px;
+    max-width: 350px;
+    padding-right: 1rem;
+}
+.modal-right {
+    flex: 1 1 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 320px;
+    max-width: 420px;
+}
+.modal-right .gameboard-grid {
+    margin: 0;
+}
+@media (max-width: 900px) {
+    .modal-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .modal-left, .modal-right {
+        max-width: 100vw;
+        min-width: 0;
+        padding-right: 0;
+    }
+}

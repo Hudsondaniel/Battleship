@@ -3,10 +3,44 @@ import createGameBoard from './Game/gameBoardUI.js';
 import Player from './Game/player.js';
 import Ship from './Game/ship.js';
 import ComputerAI from './Game/computerAI.js';
+import { 
+    initUI, 
+    showStartModal, 
+    hideStartModal, 
+    showGameModal, 
+    hideGameModal, 
+    showGameInterface, 
+    hideGameInterface, 
+    movePlayerGridToGameArea, 
+    renderGameState 
+} from './Game/ui.js';
+import { 
+    shipsToPlace, 
+    initPlacement, 
+    updatePlacementUI, 
+    setupPlacementListeners, 
+    removePlacementListeners, 
+    resetPlacement, 
+    getPlacedShips 
+} from './Game/placement.js';
+import { 
+    isPlayerTurn, 
+    gameActive, 
+    gameInProgress, 
+    checkGameInProgress, 
+    processAttack, 
+    parseCellId, 
+    checkGameOver, 
+    declareWinner, 
+    newGame, 
+    placeRandomShips, 
+    setupBoard 
+} from './Game/gameState.js';
 
-// Create game boards
-createGameBoard('player1-grid', 10);
-createGameBoard('player2-grid', 10);
+// Game state variables
+let gameIsActive = gameActive;
+let gameIsPlayerTurn = isPlayerTurn;
+let gameIsInProgress = gameInProgress;
 
 // Initialize players
 const playerOneBoard = new Player("Hudson", [
@@ -19,35 +53,73 @@ const playerOneBoard = new Player("Hudson", [
 
 const computerPlayer = new ComputerAI('computer');
 
-// Load game state if available, otherwise initialize
-if (localStorage.getItem(playerOneBoard.name)) {
-    playerOneBoard.loadGameState();
-    computerPlayer.loadGameState();
-    renderGameState(playerOneBoard, 'player1-grid');
-    renderGameState(computerPlayer, 'player2-grid', true); // Hide computer ships
-} else {
-    playerOneBoard.placeShipPlayer();
-    computerPlayer.placeShipsAutomatically([
-        { name: 'Carrier', length: 5 },
-        { name: 'Battleship', length: 4 },
-        { name: 'Destroyer', length: 3 },
-        { name: 'Submarine', length: 3 },
-        { name: 'Patrol Boat', length: 2 },
-    ]);
-    playerOneBoard.saveGameState();
-    computerPlayer.saveGameState();
+// Create opponent grid
+createGameBoard('player2-grid', 10);
+
+// Initialize game on load
+function initializeGame() {
+    // Initialize UI elements
+    initUI();
+    
+    // Add event listeners
+    document.getElementById('player2-grid').addEventListener('click', handlePlayerAttack);
+    document.getElementById('new-game-button').addEventListener('click', handleNewGame);
+    
+    // Check if game is in progress
+    gameIsInProgress = checkGameInProgress(playerOneBoard.name);
+    
+    if (gameIsInProgress) {
+        // First create the player1 grid in both the modal and main game area
+        if (!document.getElementById('player1-grid') || 
+            !document.getElementById('player1-grid').children.length) {
+            createGameBoard('player1-grid', 10);
+        }
+        
+        // Load game data for both players
+        playerOneBoard.loadGameState();
+        computerPlayer.loadGameState();
+        
+        // Move player grid to game area
+        movePlayerGridToGameArea();
+        
+        // Now render the boards after they exist
+        renderGameState(playerOneBoard, 'player1-grid', false); // Don't hide player ships!
+        renderGameState(computerPlayer, 'player2-grid', true); // Hide computer ships
+        
+        // Hide placement modal, show game interface
+        hideStartModal();
+        showGameInterface();
+    } else {
+        // Create the player grid in the modal for placement
+        if (!document.getElementById('player1-grid') || 
+            !document.getElementById('player1-grid').children.length) {
+            createGameBoard('player1-grid', 10);
+        }
+        
+        // New game - set up computer ships
+        placeRandomShips(computerPlayer, [
+            { name: 'Carrier', length: 5 },
+            { name: 'Battleship', length: 4 },
+            { name: 'Destroyer', length: 3 },
+            { name: 'Submarine', length: 3 },
+            { name: 'Patrol Boat', length: 2 },
+        ]);
+        
+        // Initialize ship placement UI
+        initPlacement();
+        
+        // Show placement modal, hide game interface
+        showStartModal();
+        
+        // Add start game button listener
+        document.getElementById('start-game-button').addEventListener('click', handleStartGame);
+        document.getElementById('close-modal-button').addEventListener('click', hideGameModal);
+    }
 }
 
-// Setup initial states
-let isPlayerTurn = true;
-let gameActive = true;
-
-// Event handlers
-document.getElementById('player2-grid').addEventListener('click', handlePlayerAttack);
-document.getElementById('new-game-button').addEventListener('click', newGame);
-
+// Player attack handler
 function handlePlayerAttack(event) {
-    if (!gameActive || !isPlayerTurn) return;
+    if (!gameIsActive || !gameIsPlayerTurn) return;
 
     const cell = event.target;
     const position = parseCellId(cell.id);
@@ -64,14 +136,21 @@ function handlePlayerAttack(event) {
     playerOneBoard.saveGameState(); // Save after attack
     computerPlayer.saveGameState(); // Save after attack
 
-    if (checkGameOver()) return;
+    // Notify player if a ship was sunk
+    if (typeof result === 'string' && result.startsWith('Sunk')) {
+        showGameModal('Ship Sunk!', `You sunk the opponent's ${result.replace('Sunk ', '').replace('!', '')}!`);
+        setTimeout(() => hideGameModal(), 1500);
+    }
 
-    isPlayerTurn = false;
+    if (checkGameOver(playerOneBoard, computerPlayer)) return;
+
+    gameIsPlayerTurn = false;
     setTimeout(handleComputerAttack, 1000);
 }
 
+// Computer attack handler
 function handleComputerAttack() {
-    if (!gameActive || isPlayerTurn) return;
+    if (!gameIsActive || gameIsPlayerTurn) return;
 
     const [x, y] = computerPlayer.getRandomPosition();
     const cell = document.getElementById(`player1-grid-cell-${x}-${y}`);
@@ -81,87 +160,54 @@ function handleComputerAttack() {
     playerOneBoard.saveGameState(); // Save after attack
     computerPlayer.saveGameState(); // Save after attack
 
-    if (checkGameOver()) return;
+    if (checkGameOver(playerOneBoard, computerPlayer)) return;
 
-    isPlayerTurn = true;
+    gameIsPlayerTurn = true;
 }
 
-function processAttack(player, x, y, cell) {
-    const board = player.board.board;
-    const cellValue = board[x][y];
-
-    if (cellValue === null) {
-        // Miss
-        board[x][y] = "X";
-        cell.classList.remove('ship');  // Remove ship styling
-        cell.classList.add('miss');
-        cell.textContent = 'X';
-        return "Miss";
-    }
-
-    // If the cell has a ship
-    const ship = player.ships.find(s => s.type === cellValue);
-    if (ship) {
-        board[x][y] = "H";
-        ship.hit();
-        cell.classList.remove('ship');  // Remove ship styling
-        cell.classList.add('hit');
-        cell.textContent = 'H';
-        return ship.isSunk() ? `Sunk ${ship.type}!` : "Hit!";
-    }
-
-    return "Invalid";
+// Handle start game button click
+function handleStartGame() {
+    // Remove event listeners for placement
+    removePlacementListeners();
+    
+    // Move grid to main gameboard
+    movePlayerGridToGameArea();
+    
+    // Set up playerOneBoard with placed ships
+    const placedShips = getPlacedShips();
+    setupBoard(playerOneBoard, placedShips);
+    
+    // Save game state and prepare game
+    computerPlayer.saveGameState();
+    gameIsInProgress = true;
+    
+    // Update UI
+    hideStartModal();
+    showGameInterface();
 }
 
+// Handle new game button click
+function handleNewGame() {
+    const { gameInProgress, gameActive, isPlayerTurn } = newGame(playerOneBoard, computerPlayer);
+    gameIsInProgress = gameInProgress;
+    gameIsActive = gameActive;
+    gameIsPlayerTurn = isPlayerTurn;
+    
+    // Reset UI for placement
+    resetPlacement();
+    
+    // Make sure grids are properly rendered
+    renderGameState(playerOneBoard, 'player1-grid');
+    renderGameState(computerPlayer, 'player2-grid', true);
+    
+    // Update UI state
+    showStartModal();
+    hideGameInterface();
 
-function parseCellId(cellId) {
-    const match = cellId.match(/player2-grid-cell-(\d+)-(\d+)/);
-    return match ? [parseInt(match[1]), parseInt(match[2])] : null;
+    // Re-initialize ship placement UI and listeners
+    initPlacement();
 }
 
-function checkGameOver() {
-    const playerLost = playerOneBoard.ships.every(ship => ship.isSunk());
-    const computerLost = computerPlayer.ships.every(ship => ship.isSunk());
-
-    if (playerLost || computerLost) {
-        gameActive = false;
-        declareWinner(playerLost ? 'Computer' : 'Player');
-        return true;
-    }
-
-    return false;
-}
-
-function declareWinner(winner) {
-    alert(`${winner} wins!`);
-}
-
-function newGame() {
-    localStorage.clear();
-    location.reload();
-}
-
-// Render the game state onto the grid
-function renderGameState(player, gridId, hideShips = false) {
-    const board = player.board.board;
-    const grid = document.getElementById(gridId);
-
-    for (let x = 0; x < board.length; x++) {
-        for (let y = 0; y < board[x].length; y++) {
-            const cell = document.getElementById(`${gridId}-cell-${x}-${y}`);
-            const cellValue = board[x][y];
-
-            if (cellValue === "X") {
-                cell.classList.add('miss');
-                cell.textContent = 'X';
-            } else if (cellValue === "H") {
-                cell.classList.add('hit');
-                cell.textContent = 'H';
-            } else if (cellValue && !hideShips) {
-                cell.classList.add('ship');
-                cell.style.backgroundColor = '#cacbd8';
-            }
-        }
-    }
-}
+// Initialize the game when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeGame);
 

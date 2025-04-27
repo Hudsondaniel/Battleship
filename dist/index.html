@@ -8,9 +8,36 @@
     <title>Battleship</title>
 </head>
 <body>
+    <div id="start-modal" class="modal">
+        <div class="modal-content modal-flex">
+            <div class="modal-left">
+                <h2>Welcome to Battleship!</h2>
+                <p>Place your ships on your grid. Select a ship, click cells to place, and use the rotate button to change orientation. All ships must be placed before starting.</p>
+                <ul id="ship-list">
+                    <!-- Ships will be listed here by JS -->
+                </ul>
+                <div id="ship-placement-buttons">
+                    <button id="rotate-ship-button" type="button">Rotate Ship</button>
+                    <button id="reset-placement-button" type="button">Reset Placement</button>
+                    <button id="start-game-button" disabled>Start Game</button>
+                </div>
+            </div>
+            <div class="modal-right">
+                <div class="gameboard-grid" id="player1-grid"></div>
+            </div>
+        </div>
+    </div>
+    <div id="game-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <button id="close-modal-button">Close</button>
+        </div>
+    </div>
     <nav>
         <img src="../src/Assests/Battleship-Icon.svg" alt="">
         <h1 class="battleship-heading">BATTLESHIP</h1>
+        <button id="new-game-button" style="margin-left:auto;">New Game</button>
     </nav>  
     <div class="gameboard">
         <div class="player-1">
@@ -18,9 +45,7 @@
                 <h2 class="heading-text-one">YOUR FLEET</h2>
             </div>
             <div class="inner-container">
-                <div class="gameboard-grid" id="player1-grid">
-
-                </div>
+                <!-- player1-grid will be moved here after placement -->
             </div>
         </div>
         <div class="player-2">
@@ -28,14 +53,9 @@
                 <h2 class="heading-text-two">OPPONENT</h2>
             </div>
             <div class="inner-container">
-                <div class="gameboard-grid" id="player2-grid">
-                
-                </div>
+                <div class="gameboard-grid" id="player2-grid"></div>
             </div>
         </div>
-    </div>
-    <div>
-        <button class="test">test Button</button>
     </div>
 </body>
 </html>
