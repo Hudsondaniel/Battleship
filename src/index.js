@@ -1,4 +1,3 @@
-import './style.css';
 import createGameBoard from './Game/gameBoardUI.js';
 import Player from './Game/player.js';
 import Ship from './Game/ship.js';
